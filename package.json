@@ -1,0 +1,19 @@
+{
+  "name": "omega-cms-businesslogic",
+  "version": "0.80.14",
+  "description": "The compiled JavaScript client library for the Omega CMS software.",
+  "main": "omegacms-businessLogic.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Omega-CMS/omega-cms-businesslogic.git"
+  },
+  "author": "OmegaCMS.io",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Omega-CMS/omega-cms-businesslogic/issues"
+  },
+  "homepage": "https://github.com/Omega-CMS/omega-cms-businesslogic#readme"
+}
