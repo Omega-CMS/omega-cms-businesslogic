@@ -1,5 +1,7 @@
 /// <reference path="../../businessLogic/moment.shim.d.ts" />
 /// <reference path="../../businessLogic/lodash.shim.d.ts" />
+/// <reference path="../../../../../MD.CMS.Administration/node_modules/@types/crypto-js/aes.d.ts" />
+/// <reference path="../../../../../MD.CMS.Administration/node_modules/@types/crypto-js/md5.d.ts" />
 declare namespace mdBusinessLogic {
     module settings {
         var debug: boolean;
@@ -12,6 +14,7 @@ declare namespace mdBusinessLogic {
         var apiAllowCrossOrigin: boolean;
         var isAdministration: boolean;
         var packageWebSocketInBody: boolean;
+        var authorizationHeader: string;
     }
 }
 declare namespace mdBusinessLogic.dataAccess.entities.base {
@@ -100,7 +103,6 @@ declare namespace mdBusinessLogic {
 }
 declare var forge: any;
 declare var angular: any;
-declare var CryptoJS: any;
 declare namespace mdBusinessLogic {
 }
 declare namespace mdBusinessLogic.dataAccess.controllers.base {
@@ -145,6 +147,7 @@ declare namespace mdBusinessLogic.dataAccess.controllers.base {
         dataType: string;
         showLoading: boolean;
         address: string;
+        clearCache: boolean;
         method: AjaxMethodType;
         headers: Array<AjaxMethodHeader>;
         lcid: number;
@@ -152,6 +155,7 @@ declare namespace mdBusinessLogic.dataAccess.controllers.base {
         onError: (data: AjaxMethodData<C, E>) => void;
         constructor(requestId?: string);
         getFullUrl(prefix?: string): string;
+        private getAddressWithCacheFlag(address, clearCache);
         getPartialUrl(prefix?: string): string;
         getMethodTypeString(): string;
         private _onsuccess(data);
@@ -504,6 +508,9 @@ declare namespace mdBusinessLogic.helpers {
 declare namespace mdBusinessLogic.helpers {
     class crypto {
         static md5(input: string): string;
+        static aes(input: string): string;
+        static sha256(input: string): string;
+        static sha3(input: string): string;
     }
 }
 declare namespace mdBusinessLogic {
@@ -649,6 +656,34 @@ declare namespace mdBusinessLogic.dataAccess.controllers {
         getById(id: number, onSuccess: (obj: entities.attributeTypeDefinition) => void, onError: (error: helpers.mdException) => void): void;
         getByInputTypeId(id: number, onSuccess: (obj: entities.attributeTypeDefinition) => void, onError: (error: helpers.mdException) => void): void;
         getAll(onSuccess: (obj: Array<entities.attributeTypeDefinition>) => void, onError: (error: helpers.mdException) => void): void;
+    }
+}
+declare namespace mdBusinessLogic.dataAccess.entities {
+    class omegaCachingObject implements base.IBaseEntity<omegaCachingObject> {
+        ByteSize: number;
+        CacheKey: string;
+        Timeout: string;
+        CacheTime: Date;
+        CacheValue: string;
+        constructor(obj?: omegaCachingObject);
+        construct(data: any): void;
+        clone(): omegaCachingObject;
+    }
+}
+declare namespace mdBusinessLogic.dataAccess.entities {
+    class cacheResponse implements base.IBaseEntity<cacheResponse> {
+        ProviderName: string;
+        CacheObjects: Array<omegaCachingObject>;
+        constructor(obj?: cacheResponse);
+        construct(data: any): void;
+        clone(): cacheResponse;
+    }
+}
+declare namespace mdBusinessLogic.dataAccess.controllers {
+    class cacheController extends base.BaseController<cacheController, entities.cacheResponse> {
+        constructor();
+        getAllDataCache(onSuccess: (obj: Array<entities.cacheResponse>) => void, onError: (error: helpers.mdException) => void): void;
+        invalidateDataCache(provider: string, cacheKey: string, onSuccess: (obj: entities.cacheResponse) => void, onError: (error: helpers.mdException) => void): void;
     }
 }
 declare namespace mdBusinessLogic.dataAccess.controllers {
@@ -1024,7 +1059,7 @@ declare namespace mdBusinessLogic.dataAccess.entities {
 declare namespace mdBusinessLogic.dataAccess.controllers {
     class folderController extends base.BaseController<folderController, entities.folder<entities.content> | entities.primitiveType<any> | entities.paginationEntity<entities.folder<entities.content>>> {
         constructor();
-        getByFolderPath(path: string, onSuccess: (obj: entities.folder<entities.content>) => void, onError: (error: helpers.mdException) => void): void;
+        getByFolderPath(path: string, loadContents: boolean, onSuccess: (obj: entities.folder<entities.content>) => void, onError: (error: helpers.mdException) => void): void;
         search(searchTerm: string, parentId: number, recursive: boolean, onSuccess: (obj: Array<entities.folder<entities.content>>) => void, onError: (error: helpers.mdException) => void): void;
         paginationGetByFolderPath(paginationData: any, onSuccess: (obj: entities.folder<entities.content>) => void, onError: (error: helpers.mdException) => void): void;
         paginationGetByParentId(paginationData: any, onSuccess: (obj: entities.paginationEntity<entities.folder<entities.content>>) => void, onError: (error: helpers.mdException) => void): void;
@@ -1946,8 +1981,6 @@ declare namespace mdBusinessLogic.dataAccess.entities.generic {
 }
 declare namespace mdBusinessLogic.dataAccess.entities.grid {
     class gridTileData implements base.IBaseEntity<gridTileData> {
-        x: number;
-        y: number;
         width: number;
         height: number;
         minWidth: number;
@@ -1955,9 +1988,23 @@ declare namespace mdBusinessLogic.dataAccess.entities.grid {
         id: string;
         parentId: string;
         uniqueId: string;
+        index: number;
+        layout: gridTileLayout;
+        whiteframe: number;
+        layoutPadding: boolean;
+        layoutMargin: boolean;
+        layoutWrap: boolean;
         constructor(obj?: gridTileData);
         construct(data: any): void;
         clone(): gridTileData;
+        getWidth(): number;
+        getHeight(): number;
+        setWidth(width: number): void;
+        setHeight(height: number): void;
+    }
+    enum gridTileLayout {
+        Row = 1,
+        Column = 2,
     }
 }
 declare namespace mdBusinessLogic.dataAccess.entities.genericContent {
