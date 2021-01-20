@@ -431,7 +431,7 @@ declare namespace mdBusinessLogic.dataAccess.controllers {
         translate(content: entities.content, targetLcid: number, lcid: number, onSuccess: (obj: entities.content) => void, onError: (error: helpers.mdException) => void): void;
         selectAllCount(id: number, onSuccess: (obj: entities.content) => void, onError: (error: helpers.mdException) => void): void;
         getByFolderId(id: number, loadAuthor: boolean, lcid: number, loadFields: boolean, loadMetaDataFields: boolean, onSuccess: (obj: Array<entities.content>) => void, onError: (error: helpers.mdException) => void): void;
-        paginationGetByFolderId(paginationData: number, onSuccess: (obj: entities.paginationEntity<entities.content>) => void, onError: (error: helpers.mdException) => void): void;
+        paginationGetByFolderId(paginationData: options.iFolderPaginatedRequestOptions, onSuccess: (obj: entities.paginationEntity<entities.content>) => void, onError: (error: helpers.mdException) => void): void;
         getByFolderIdCount(countData: number, onSuccess: (obj: entities.primitiveType<number>) => void, onError: (error: helpers.mdException) => void): void;
         getAll(onSuccess: (obj: Array<entities.content>) => void, onError: (error: helpers.mdException) => void): void;
         getAllVersion(id: number, onSuccess: (obj: Array<entities.content>) => void, onError: (error: helpers.mdException) => void): void;
@@ -985,8 +985,8 @@ declare namespace mdBusinessLogic.dataAccess.controllers {
         constructor();
         getByFolderPath(path: string, loadContents: boolean, onSuccess: (obj: entities.folder<entities.content>) => void, onError: (error: helpers.mdException) => void): void;
         search(searchTerm: string, parentId: number, recursive: boolean, onSuccess: (obj: Array<entities.folder<entities.content>>) => void, onError: (error: helpers.mdException) => void): void;
-        paginationGetByFolderPath(paginationData: any, onSuccess: (obj: entities.folder<entities.content>) => void, onError: (error: helpers.mdException) => void): void;
-        paginationGetByParentId(paginationData: any, onSuccess: (obj: entities.paginationEntity<entities.folder<entities.content>>) => void, onError: (error: helpers.mdException) => void): void;
+        paginationGetByFolderPath(paginationData: options.iFolderPaginatedRequestOptions, onSuccess: (obj: entities.folder<entities.content>) => void, onError: (error: helpers.mdException) => void): void;
+        paginationGetByParentId(paginationData: options.iFolderPaginatedRequestOptions, onSuccess: (obj: entities.paginationEntity<entities.folder<entities.content>>) => void, onError: (error: helpers.mdException) => void): void;
         getByParentId(parentId: number, onSuccess: (obj: Array<entities.folder<entities.content>>) => void, onError: (error: helpers.mdException) => void): void;
         getHierarchyByParentId(parentId: number, depth: any, onSuccess: (obj: Array<entities.folder<entities.content>>) => void, onError: (error: helpers.mdException) => void): void;
         getByParentIdCount(countData: any, onSuccess: (obj: number) => void, onError: (error: helpers.mdException) => void): void;
@@ -1045,7 +1045,7 @@ declare namespace mdBusinessLogic.dataAccess.controllers {
         searchByFileType(searchText: string, fileType: number, lcid: number, onSuccess: (obj: Array<entities.mediaContent>) => void, onError: (error: helpers.mdException) => void): void;
         del(id: number, onSuccess: (obj: entities.mediaContent) => void, onError: (error: helpers.mdException) => void): void;
         getAll(onSuccess: (obj: Array<entities.mediaContent>) => void, onError: (error: helpers.mdException) => void): void;
-        paginationGetByFolderId(paginationData: any, onSuccess: (obj: entities.paginationEntity<entities.mediaContent>) => void, onError: (error: helpers.mdException) => void): void;
+        paginationGetByFolderId(paginationData: options.iFolderPaginatedRequestOptions, onSuccess: (obj: entities.paginationEntity<entities.mediaContent>) => void, onError: (error: helpers.mdException) => void): void;
         getByFolderIdCount(countData: any, onSuccess: (obj: entities.primitiveType<number>) => void, onError: (error: helpers.mdException) => void): void;
         SavePermissions(mediaContent: entities.mediaContent, onSuccess: (obj: entities.mediaContent) => void, onError: (error: helpers.mdException) => void): void;
         save(mediaContent: entities.mediaContent, onSuccess: (obj: entities.mediaContent) => void, onError: (error: helpers.mdException) => void): void;
@@ -1718,6 +1718,30 @@ declare namespace mdBusinessLogic.dataAccess.controllers {
         search(searchData: any, onSuccess: (obj: Array<entities.user>) => void, onError: (error: helpers.mdException) => void): void;
         passwordReset(token: string, email: string, password: string, onSuccess: (obj: entities.user) => void, onError: (error: helpers.mdException) => string): void;
         validateTokenSocket(requestId: string, token: string, onSuccess: (obj: entities.user, socket: WebSocket) => void, onError: (error: helpers.mdException, socket: WebSocket) => void): string;
+    }
+}
+declare namespace mdBusinessLogic.dataAccess.controllers.options {
+    interface iFolderPaginatedRequestOptions extends iPathPaginatedRequestOptions {
+        fillContents: boolean;
+        fillMediaContents: boolean;
+    }
+}
+declare namespace mdBusinessLogic.dataAccess.controllers.options {
+    interface iPaginatedRequestOptions {
+        pageIndex: number;
+        pageSize: number;
+        fillContents: boolean;
+        fillMediaContents: boolean;
+    }
+}
+declare namespace mdBusinessLogic.dataAccess.controllers.options {
+    interface iPathPaginatedRequestOptions extends iSearchRequestOptions {
+        path: string;
+    }
+}
+declare namespace mdBusinessLogic.dataAccess.controllers.options {
+    interface iSearchRequestOptions extends iPaginatedRequestOptions {
+        searchTerm: string;
     }
 }
 declare namespace mdBusinessLogic.dataAccess.entities {
