@@ -719,15 +719,15 @@ declare namespace mdBusinessLogic.dataAccess.controllers {
     }
 }
 declare namespace mdBusinessLogic.dataAccess.controllers {
-    class contentTypeDefinitionControllerGeneric<T extends entities.genericContent.genericContentField & entities.base.IBaseEntity<T>> extends base.BaseController<contentTypeDefinitionControllerGeneric<T>, entities.contentTypeDefinition<entities.contentTypeDefinitionField> | entities.primitiveType<any> | entities.paginationEntity<entities.contentTypeDefinition<entities.contentTypeDefinitionField>>> {
+    class contentTypeDefinitionControllerGeneric<T extends entities.genericContent.genericContentField & entities.base.IBaseEntity<T>> extends base.BaseController<contentTypeDefinitionControllerGeneric<T>, entities.contentTypeDefinition<T> | entities.primitiveType<any> | entities.paginationEntity<entities.contentTypeDefinition<T>>> {
         constructor();
-        getById(id: number, onSuccess: (obj: entities.contentTypeDefinition<entities.contentTypeDefinitionField>) => void, onError: (error: helpers.mdException) => void): void;
-        getAll(onSuccess: (obj: Array<entities.contentTypeDefinition<entities.contentTypeDefinitionField>>) => void, onError: (error: helpers.mdException) => void): void;
-        getByFolder(folderId: number, onSuccess: (obj: Array<entities.contentTypeDefinition<entities.contentTypeDefinitionField>>) => void, onError: (error: helpers.mdException) => void): void;
-        contentTypeDefinitionsByFolder(folderId: number, onSuccess: (obj: Array<entities.contentTypeDefinition<entities.contentTypeDefinitionField>>) => void, onError: (error: helpers.mdException) => void): void;
-        save(contentTypeDefinition: entities.contentTypeDefinition<entities.contentTypeDefinitionField>, onSuccess: (obj: entities.contentTypeDefinition<entities.contentTypeDefinitionField>) => void, onError: (error: helpers.mdException) => void): void;
-        del(id: number, onSuccess: (obj: entities.contentTypeDefinition<entities.contentTypeDefinitionField>) => void, onError: (error: helpers.mdException) => void): void;
-        paginationGetAll(data: any, onSuccess: (obj: entities.paginationEntity<entities.contentTypeDefinition<entities.contentTypeDefinitionField>>) => void, onError: (error: helpers.mdException) => void): void;
+        getById(id: number, onSuccess: (obj: entities.contentTypeDefinition<T>) => void, onError: (error: helpers.mdException) => void): void;
+        getAll(onSuccess: (obj: Array<entities.contentTypeDefinition<T>>) => void, onError: (error: helpers.mdException) => void): void;
+        getByFolder(folderId: number, onSuccess: (obj: Array<entities.contentTypeDefinition<T>>) => void, onError: (error: helpers.mdException) => void): void;
+        contentTypeDefinitionsByFolder(folderId: number, onSuccess: (obj: Array<entities.contentTypeDefinition<T>>) => void, onError: (error: helpers.mdException) => void): void;
+        save(contentTypeDefinition: entities.contentTypeDefinition<T>, onSuccess: (obj: entities.contentTypeDefinition<T>) => void, onError: (error: helpers.mdException) => void): void;
+        del(id: number, onSuccess: (obj: entities.contentTypeDefinition<T>) => void, onError: (error: helpers.mdException) => void): void;
+        paginationGetAll(data: any, onSuccess: (obj: entities.paginationEntity<entities.contentTypeDefinition<T>>) => void, onError: (error: helpers.mdException) => void): void;
         getAllCount(countData: any, onSuccess: (obj: entities.primitiveType<number>) => void, onError: (error: helpers.mdException) => void): void;
     }
     class contentTypeDefinitionController extends contentTypeDefinitionControllerGeneric<entities.contentTypeDefinitionField> {
