@@ -813,7 +813,7 @@ declare namespace mdBusinessLogic.dataAccess.controllers {
     }
 }
 declare namespace mdBusinessLogic.dataAccess.controllers {
-    class contentTypeDefinitionController extends base.BaseController<contentTypeDefinitionController, entities.contentTypeDefinition<entities.contentTypeDefinitionField> | entities.primitiveType<any> | entities.paginationEntity<entities.contentTypeDefinition<entities.contentTypeDefinitionField>>> {
+    class contentTypeDefinitionControllerGeneric<T extends entities.genericContent.genericContentField & entities.base.IBaseEntity<T>> extends base.BaseController<contentTypeDefinitionControllerGeneric<T>, entities.contentTypeDefinition<entities.contentTypeDefinitionField> | entities.primitiveType<any> | entities.paginationEntity<entities.contentTypeDefinition<entities.contentTypeDefinitionField>>> {
         constructor();
         getById(id: number, onSuccess: (obj: entities.contentTypeDefinition<entities.contentTypeDefinitionField>) => void, onError: (error: helpers.mdException) => void): void;
         getAll(onSuccess: (obj: Array<entities.contentTypeDefinition<entities.contentTypeDefinitionField>>) => void, onError: (error: helpers.mdException) => void): void;
@@ -823,6 +823,10 @@ declare namespace mdBusinessLogic.dataAccess.controllers {
         del(id: number, onSuccess: (obj: entities.contentTypeDefinition<entities.contentTypeDefinitionField>) => void, onError: (error: helpers.mdException) => void): void;
         paginationGetAll(data: any, onSuccess: (obj: entities.paginationEntity<entities.contentTypeDefinition<entities.contentTypeDefinitionField>>) => void, onError: (error: helpers.mdException) => void): void;
         getAllCount(countData: any, onSuccess: (obj: entities.primitiveType<number>) => void, onError: (error: helpers.mdException) => void): void;
+    }
+    class contentTypeDefinitionController extends contentTypeDefinitionControllerGeneric<entities.contentTypeDefinitionField> {
+    }
+    class contentTypeDefinitionControllerValue extends contentTypeDefinitionControllerGeneric<entities.contentTypeDefinitionFieldValue> {
     }
 }
 declare namespace mdBusinessLogic.dataAccess.controllers {
