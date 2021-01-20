@@ -1,7 +1,5 @@
 /// <reference path="../../businessLogic/moment.shim.d.ts" />
 /// <reference path="../../businessLogic/lodash.shim.d.ts" />
-/// <reference path="../../../../../MD.CMS.Administration/node_modules/@types/crypto-js/aes.d.ts" />
-/// <reference path="../../../../../MD.CMS.Administration/node_modules/@types/crypto-js/md5.d.ts" />
 declare namespace mdBusinessLogic {
     module settings {
         var debug: boolean;
@@ -155,18 +153,18 @@ declare namespace mdBusinessLogic.dataAccess.controllers.base {
         onError: (data: AjaxMethodData<C, E>) => void;
         constructor(requestId?: string);
         getFullUrl(prefix?: string): string;
-        private getAddressWithCacheFlag(address, clearCache);
+        private getAddressWithCacheFlag;
         getPartialUrl(prefix?: string): string;
         getMethodTypeString(): string;
-        private _onsuccess(data);
-        private _onerror(data);
+        private _onsuccess;
+        private _onerror;
     }
     enum AjaxMethodType {
         GET = 1,
         POST = 2,
         PUT = 3,
         DELETE = 4,
-        SOCKET = 5,
+        SOCKET = 5
     }
     class AjaxMethodHeader {
         name: string;
@@ -202,10 +200,10 @@ declare namespace mdBusinessLogic.dataAccess.controllers.base {
         private controllerBase;
         constructor(controllerBase: string);
         getAddress(endpoint: string, data?: any, includeBase?: boolean): string;
-        private generateNonSecureRequest(options);
-        private setHeaders(options);
-        private prepareFormData(data);
-        private prepareSubFormItems(formData, data, namePrefix);
+        private generateNonSecureRequest;
+        private setHeaders;
+        private prepareFormData;
+        private prepareSubFormItems;
         _get(options: AjaxMethodOptions<C, E>): void;
         _post(options: AjaxMethodOptions<C, E>): void;
         _put(options: AjaxMethodOptions<C, E>): void;
@@ -504,98 +502,8 @@ declare namespace mdBusinessLogic.dataAccess.entities {
         ContentTypeDefinitionDataSource = 42,
         ContentTypeDefinitionDataSourceJoin = 44,
         ContentTypeDefinitionFolderDataBoundCondition = 45,
-        ContentTypeDefinitionFolderDataBoundSync = 46,
+        ContentTypeDefinitionFolderDataBoundSync = 46
     }
-}
-declare namespace mdBusinessLogic.helpers {
-    module array {
-    }
-}
-declare namespace mdBusinessLogic.helpers {
-    module checkType {
-        function isFunction(functionToCheck: any): boolean;
-        function isArray(obj: any): boolean;
-        function isObject(obj: any): boolean;
-    }
-}
-declare namespace mdBusinessLogic.helpers {
-    class crypto {
-        static md5(input: string): string;
-        static aes(input: string): string;
-        static sha256(input: string): string;
-        static sha3(input: string): string;
-    }
-}
-declare namespace mdBusinessLogic {
-    namespace helpers {
-        class dialog {
-            dialog: any;
-            state: any;
-            constructor(dialog: any, state: any);
-            showSimpleDialogO(_dialogInfo: any, _stateInfo: any): void;
-            showCustomDialog(_onConfirm: any, _onDecline: any): void;
-            showSimpleDialog(_title: any, _text: any, _redirect: any, _state: any, _stateParams: any): void;
-            showConfirmDialogO(_dialogInfo: any, _onConfirm: any, _onDecline: any): void;
-            showConfirmDialog(_title: any, _text: any, _ok: any, _cancel: any, _onConfirm: any, _onDecline: any): void;
-            redirect(_state: any, _stateParams: any): void;
-        }
-    }
-}
-declare namespace mdBusinessLogic.helpers {
-    class Guid {
-        static validator: RegExp;
-        static EMPTY: string;
-        static isGuid(guid: any): boolean;
-        static create(): Guid;
-        static createEmpty(): Guid;
-        static parse(guid: string): Guid;
-        static raw(): string;
-        private static gen(count);
-        private value;
-        private constructor();
-        equals(other: Guid): boolean;
-        isEmpty(): boolean;
-        toString(): string;
-        toJSON(): any;
-    }
-}
-declare namespace mdBusinessLogic.helpers {
-    module touchScreenHelper {
-        function isTouchDevice(): number | true;
-    }
-}
-declare namespace mdBusinessLogic.settings {
-    module ajax {
-        function onComplete(xhr: any): void;
-        function onBeforeSend(xhr: XMLHttpRequest): void;
-        function onUnauthorized(error: mdBusinessLogic.helpers.mdException): void;
-        function onForbidden(error: mdBusinessLogic.helpers.mdException): void;
-        function onJsonSerialize(nonSerializedRequest: any): any;
-        interface connectionObject<T> {
-            id: string;
-            obj: T;
-        }
-        class connections {
-            private static _sockets;
-            private static _requests;
-            static addSocket(socket: connectionObject<WebSocket>): void;
-            static addRequest(request: connectionObject<XMLHttpRequest>): void;
-            static getSocket(id: string): WebSocket;
-            static removeSocket(id: string): void;
-            static removeRequest(id: string): void;
-            static closeSockets(): void;
-            static closeRequests(): void;
-            static closeAll(): void;
-        }
-    }
-}
-declare namespace mdBusinessLogic.settings.secureApi {
-    var enabled: boolean;
-    var rsaKeys: Object;
-    var aesKey: string;
-    var aesIV: string;
-    var crypto: any;
-    var token: string;
 }
 declare namespace mdBusinessLogic.dataAccess.entities {
     class approvalChain extends base.BaseEntity implements base.IBaseEntity<approvalChain> {
@@ -901,7 +809,7 @@ declare namespace mdBusinessLogic.dataAccess.entities {
         video = 2,
         audio = 3,
         application = 4,
-        text = 5,
+        text = 5
     }
     class file extends base.BaseEntity implements base.IBaseEntity<file> {
         path: string;
@@ -966,7 +874,7 @@ declare namespace mdBusinessLogic.dataAccess.entities {
         pdf = 11,
         docx = 12,
         xls = 13,
-        xlsx = 14,
+        xlsx = 14
     }
 }
 declare namespace mdBusinessLogic.dataAccess.entities {
@@ -1016,7 +924,7 @@ declare namespace mdBusinessLogic.dataAccess.entities {
         None = 0,
         Folder = 1,
         Content = 2,
-        MediaContent = 3,
+        MediaContent = 3
     }
 }
 declare namespace mdBusinessLogic.dataAccess.entities {
@@ -1308,7 +1216,7 @@ declare namespace mdBusinessLogic.dataAccess.entities.permissions {
     enum permissionAccessTypeEnum {
         Read = 1,
         Write = 2,
-        Delete = 3,
+        Delete = 3
     }
 }
 declare namespace mdBusinessLogic.dataAccess.entities.permissions {
@@ -1828,7 +1736,7 @@ declare namespace mdBusinessLogic.dataAccess.entities {
     }
     enum executionScheduleType {
         Manual = 0,
-        Recurring = 1,
+        Recurring = 1
     }
 }
 declare namespace mdBusinessLogic.dataAccess.entities {
@@ -1845,7 +1753,7 @@ declare namespace mdBusinessLogic.dataAccess.entities {
     enum aliasType {
         Content = 1,
         Taxonomy = 2,
-        Folder = 3,
+        Folder = 3
     }
 }
 declare namespace mdBusinessLogic.dataAccess.entities {
@@ -1866,18 +1774,7 @@ declare namespace mdBusinessLogic.dataAccess.entities {
         mediaContentSelectorSingle = 14,
         userSelectorSingle = 15,
         calculated = 16,
-        tabbedSections = 17,
-    }
-}
-declare namespace mdBusinessLogic.dataAccess.entities {
-    class contentTypeDataSource extends base.BaseEntity implements base.IBaseEntity<contentTypeDataSource> {
-        ConnectionString: string;
-        ConnectionStringObject: any;
-        DbType: string;
-        ContentTypeDefinitionId: number;
-        constructor(obj?: contentTypeDataSource);
-        construct(data: any): void;
-        clone(): contentTypeDataSource;
+        tabbedSections = 17
     }
 }
 declare namespace mdBusinessLogic.dataAccess.entities {
@@ -1889,6 +1786,17 @@ declare namespace mdBusinessLogic.dataAccess.entities {
         constructor(obj?: contentTypeDataSourceJoin);
         construct(data: any): void;
         clone(): contentTypeDataSourceJoin;
+    }
+}
+declare namespace mdBusinessLogic.dataAccess.entities {
+    class contentTypeDataSource extends base.BaseEntity implements base.IBaseEntity<contentTypeDataSource> {
+        ConnectionString: string;
+        ConnectionStringObject: any;
+        DbType: string;
+        ContentTypeDefinitionId: number;
+        constructor(obj?: contentTypeDataSource);
+        construct(data: any): void;
+        clone(): contentTypeDataSource;
     }
 }
 declare namespace mdBusinessLogic.dataAccess.entities {
@@ -1909,7 +1817,7 @@ declare namespace mdBusinessLogic.dataAccess.entities {
         GreaterThan = 4,
         GreaterThanOrEqualTo = 5,
         LessThan = 6,
-        LessThanOrEqualTo = 7,
+        LessThanOrEqualTo = 7
     }
 }
 declare namespace mdBusinessLogic.dataAccess.entities {
@@ -1929,7 +1837,7 @@ declare namespace mdBusinessLogic.dataAccess.entities {
         NoSync = 0,
         RemoteToOmega = 1,
         OmegaToRemote = 2,
-        Bidirectional = 3,
+        Bidirectional = 3
     }
 }
 declare namespace mdBusinessLogic.dataAccess.entities {
@@ -2075,7 +1983,7 @@ declare namespace mdBusinessLogic.dataAccess.entities.grid {
     }
     enum gridTileLayout {
         Row = 1,
-        Column = 2,
+        Column = 2
     }
 }
 declare namespace mdBusinessLogic.dataAccess.entities.genericContent {
@@ -2100,19 +2008,19 @@ declare namespace mdBusinessLogic.dataAccess.entities.permissions {
         None = 0,
         Folder = 1,
         Content = 2,
-        MediaContent = 3,
+        MediaContent = 3
     }
 }
 declare namespace mdBusinessLogic.dataAccess.entities.permissions {
     enum permissionObjectTypeEnum {
         User = 0,
-        ProfileType = 1,
+        ProfileType = 1
     }
 }
 declare namespace mdBusinessLogic.dataAccess.entities.permissions {
     enum permissionTypeEnum {
         Api = 1,
-        Object = 2,
+        Object = 2
     }
 }
 declare namespace mdBusinessLogic.dataAccess.entities.search {
@@ -2204,4 +2112,147 @@ declare namespace mdBusinessLogic.dataAccess.entities.search {
         construct(data: any): void;
         clone(): user;
     }
+}
+declare namespace mdBusinessLogic.dataAccess.query {
+    class queryExpressionGeneric<T, K extends queryExpressionGeneric<T, K>> {
+        private field;
+        private contentType;
+        private comparer;
+        private transform;
+        private value;
+        constructor(transform: helpers.data.dataTransformEnum);
+        protected compareGeneric(obj: K, comparer: helpers.data.comparerTypeEnum): K;
+        protected withValueGeneric(obj: K, value: T): K;
+        execute(onSuccess: (data: Array<entities.contentTypeDefinitionFieldValue>) => void, onError: (error: helpers.mdException) => void): void;
+        executeAsContents(onSuccess: (data: Array<entities.content>) => void, onError: (error: helpers.mdException) => void): void;
+        protected static queryGeneric<T, K extends queryExpressionGeneric<T, K>>(obj1: entities.contentTypeDefinition<entities.contentTypeDefinitionField>, obj: K, fieldName: string): K;
+    }
+    class queryExpressionString extends queryExpressionGeneric<string, queryExpressionString> {
+        constructor();
+        compare(comparer: helpers.data.comparerTypeEnum): queryExpressionString;
+        withValue(value: string): queryExpressionString;
+        static query(obj1: entities.contentTypeDefinition<entities.contentTypeDefinitionField>, fieldName: string): queryExpressionString;
+    }
+    class queryExpressionInteger extends queryExpressionGeneric<number, queryExpressionInteger> {
+        constructor();
+        compare(comparer: helpers.data.comparerTypeEnum): queryExpressionInteger;
+        withValue(value: number): queryExpressionInteger;
+        static query(obj1: entities.contentTypeDefinition<entities.contentTypeDefinitionField>, fieldName: string): queryExpressionInteger;
+    }
+    class queryExpressionDate extends queryExpressionGeneric<Date, queryExpressionDate> {
+        constructor();
+        compare(comparer: helpers.data.comparerTypeEnum): queryExpressionDate;
+        withValue(value: Date): queryExpressionDate;
+        static query(obj1: entities.contentTypeDefinition<entities.contentTypeDefinitionField>, fieldName: string): queryExpressionDate;
+    }
+}
+declare namespace mdBusinessLogic.helpers {
+    module array {
+    }
+}
+declare namespace mdBusinessLogic.helpers {
+    module checkType {
+        function isFunction(functionToCheck: any): boolean;
+        function isArray(obj: any): boolean;
+        function isObject(obj: any): boolean;
+    }
+}
+declare namespace mdBusinessLogic.helpers {
+    class crypto {
+        static md5(input: string): string;
+        static aes(input: string): string;
+        static sha256(input: string): string;
+        static sha3(input: string): string;
+    }
+}
+declare namespace mdBusinessLogic {
+    namespace helpers {
+        class dialog {
+            dialog: any;
+            state: any;
+            constructor(dialog: any, state: any);
+            showSimpleDialogO(_dialogInfo: any, _stateInfo: any): void;
+            showCustomDialog(_onConfirm: any, _onDecline: any): void;
+            showSimpleDialog(_title: any, _text: any, _redirect: any, _state: any, _stateParams: any): void;
+            showConfirmDialogO(_dialogInfo: any, _onConfirm: any, _onDecline: any): void;
+            showConfirmDialog(_title: any, _text: any, _ok: any, _cancel: any, _onConfirm: any, _onDecline: any): void;
+            redirect(_state: any, _stateParams: any): void;
+        }
+    }
+}
+declare namespace mdBusinessLogic.helpers {
+    class Guid {
+        static validator: RegExp;
+        static EMPTY: string;
+        static isGuid(guid: any): boolean;
+        static create(): Guid;
+        static createEmpty(): Guid;
+        static parse(guid: string): Guid;
+        static raw(): string;
+        private static gen;
+        private value;
+        private constructor();
+        equals(other: Guid): boolean;
+        isEmpty(): boolean;
+        toString(): string;
+        toJSON(): any;
+    }
+}
+declare namespace mdBusinessLogic.helpers {
+    module touchScreenHelper {
+        function isTouchDevice(): number | true;
+    }
+}
+declare namespace mdBusinessLogic.helpers.data {
+    enum comparerTypeEnum {
+        equals = 1,
+        notEquals = 2,
+        like = 3,
+        greaterThan = 4,
+        greaterThanOrEqualTo = 5,
+        lessThan = 6,
+        lessThanOrEqualTo = 7
+    }
+}
+declare namespace mdBusinessLogic.helpers.data {
+    enum dataTransformEnum {
+        toString = 1,
+        toInt = 2,
+        toLong = 3,
+        toDateTime = 4,
+        toFloat = 5
+    }
+}
+declare namespace mdBusinessLogic.settings {
+    module ajax {
+        function onComplete(xhr: any): void;
+        function onBeforeSend(xhr: XMLHttpRequest): void;
+        function onUnauthorized(error: mdBusinessLogic.helpers.mdException): void;
+        function onForbidden(error: mdBusinessLogic.helpers.mdException): void;
+        function onJsonSerialize(nonSerializedRequest: any): any;
+        interface connectionObject<T> {
+            id: string;
+            obj: T;
+        }
+        class connections {
+            private static _sockets;
+            private static _requests;
+            static addSocket(socket: connectionObject<WebSocket>): void;
+            static addRequest(request: connectionObject<XMLHttpRequest>): void;
+            static getSocket(id: string): WebSocket;
+            static removeSocket(id: string): void;
+            static removeRequest(id: string): void;
+            static closeSockets(): void;
+            static closeRequests(): void;
+            static closeAll(): void;
+        }
+    }
+}
+declare namespace mdBusinessLogic.settings.secureApi {
+    var enabled: boolean;
+    var rsaKeys: Object;
+    var aesKey: string;
+    var aesIV: string;
+    var crypto: any;
+    var token: string;
 }
