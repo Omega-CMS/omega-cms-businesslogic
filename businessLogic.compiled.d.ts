@@ -377,7 +377,7 @@ declare namespace mdBusinessLogic.dataAccess.entities {
 }
 declare namespace mdBusinessLogic.dataAccess.entities {
     class contentTypeDefinitionFieldValue extends entities.genericContent.genericContentFieldValue implements base.IBaseEntity<contentTypeDefinitionFieldValue> {
-        ContentId: number;
+        ContentId: string;
         LCID: number;
         DateCreated: Date;
         ContentTypeDefinitionFieldId: number;
@@ -412,10 +412,23 @@ declare namespace mdBusinessLogic.dataAccess.entities {
         clone(): content;
     }
 }
+declare namespace mdBusinessLogic.dataAccess.controllers.options {
+    interface iContentRequestOptions {
+        ContentIds: Array<string>;
+        LoadAuthor?: boolean;
+        LoadFields?: boolean;
+        LoadMetaData?: boolean;
+        LCID?: number;
+        FolderId?: number;
+        OnlyPublished?: boolean;
+    }
+}
 declare namespace mdBusinessLogic.dataAccess.controllers {
     class contentController extends base.BaseController<contentController, entities.content | entities.primitiveType<any> | entities.paginationEntity<entities.content>> {
         constructor(controllerBase?: string);
-        getById(id: number, loadAuthor: boolean, lcid: number, fillFields: boolean, isDataBound: boolean, contentTypeDefinitionId: number, onSuccess: (obj: entities.content) => void, onError: (error: helpers.mdException) => void): void;
+        getById(id: string, loadAuthor: boolean, lcid: number, fillFields: boolean, isDataBound: boolean, contentTypeDefinitionId: number, onSuccess: (obj: entities.content) => void, onError: (error: helpers.mdException) => void): void;
+        getByIds(ids: Array<string>, loadAuthor: boolean, lcid: number, fillFields: boolean, isDataBound: boolean, contentTypeDefinitionId: number, onSuccess: (obj: Array<entities.content>) => void, onError: (error: helpers.mdException) => void): void;
+        getByRequest(request: options.iContentRequestOptions, onSuccess: (obj: Array<entities.content>) => void, onError: (error: helpers.mdException) => void): void;
         taxonomyContentGetContentByTaxonomy(id: number, onSuccess: (obj: Array<entities.content>) => void, onError: (error: helpers.mdException) => void): void;
         taxonomyContentGetContentByTaxonomyFullMeta(id: number, onSuccess: (obj: Array<entities.content>) => void, onError: (error: helpers.mdException) => void): void;
         menuContentGetContentByMenu(id: number, onSuccess: (obj: Array<entities.content>) => void, onError: (error: helpers.mdException) => void): void;
@@ -826,6 +839,7 @@ declare namespace mdBusinessLogic.dataAccess.controllers {
         constructor();
         getByContent(id: number, onSuccess: (obj: Array<entities.contentTypeDefinitionFieldValue>) => void, onError: (error: helpers.mdException) => void): void;
         getByContentId(id: number, onSuccess: (obj: Array<entities.contentTypeDefinitionFieldValue>) => void, onError: (error: helpers.mdException) => void): void;
+        getByValue(value: string, contentTypeDefinitionId: number, contentTypeDefinitionFieldId: number, comparer: helpers.data.comparerTypeEnum, transform: helpers.data.dataTransformEnum, onSuccess: (obj: Array<entities.contentTypeDefinitionFieldValue>) => void, onError: (error: helpers.mdException) => void): void;
         save(fieldValue: entities.contentTypeDefinitionFieldValue, onSuccess: (obj: entities.contentTypeDefinitionFieldValue) => void, onError: (error: helpers.mdException) => void): void;
     }
 }
@@ -1968,6 +1982,59 @@ declare namespace mdBusinessLogic {
                 clone(): templateScreenshot;
             }
         }
+    }
+}
+declare namespace mdBusinessLogic.dataAccess.query {
+    class queryExpressionGeneric<T, K extends queryExpressionGeneric<T, K>> {
+        private field;
+        private contentType;
+        private comparer;
+        private transform;
+        private value;
+        constructor(transform: helpers.data.dataTransformEnum);
+        protected compareGeneric(obj: K, comparer: helpers.data.comparerTypeEnum): K;
+        protected withValueGeneric(obj: K, value: T): K;
+        execute(onSuccess: (data: Array<entities.contentTypeDefinitionFieldValue>) => void, onError: (error: helpers.mdException) => void): void;
+        executeAsContents(onSuccess: (data: Array<entities.content>) => void, onError: (error: helpers.mdException) => void): void;
+        protected static queryGeneric<T, K extends queryExpressionGeneric<T, K>>(obj1: entities.contentTypeDefinition<entities.contentTypeDefinitionField>, obj: K, fieldName: string): K;
+    }
+    class queryExpressionString extends queryExpressionGeneric<string, queryExpressionString> {
+        constructor();
+        compare(comparer: helpers.data.comparerTypeEnum): queryExpressionString;
+        withValue(value: string): queryExpressionString;
+        static query(obj1: entities.contentTypeDefinition<entities.contentTypeDefinitionField>, fieldName: string): queryExpressionString;
+    }
+    class queryExpressionInteger extends queryExpressionGeneric<number, queryExpressionInteger> {
+        constructor();
+        compare(comparer: helpers.data.comparerTypeEnum): queryExpressionInteger;
+        withValue(value: number): queryExpressionInteger;
+        static query(obj1: entities.contentTypeDefinition<entities.contentTypeDefinitionField>, fieldName: string): queryExpressionInteger;
+    }
+    class queryExpressionDate extends queryExpressionGeneric<Date, queryExpressionDate> {
+        constructor();
+        compare(comparer: helpers.data.comparerTypeEnum): queryExpressionDate;
+        withValue(value: Date): queryExpressionDate;
+        static query(obj1: entities.contentTypeDefinition<entities.contentTypeDefinitionField>, fieldName: string): queryExpressionDate;
+    }
+}
+declare namespace mdBusinessLogic.helpers.data {
+    enum comparerTypeEnum {
+        equals = 1,
+        notEquals = 2,
+        like = 3,
+        greaterThan = 4,
+        greaterThanOrEqualTo = 5,
+        lessThan = 6,
+        lessThanOrEqualTo = 7,
+    }
+}
+declare namespace mdBusinessLogic.helpers.data {
+    enum dataTransformEnum {
+        toString = 1,
+        toInt = 2,
+        toLong = 3,
+        toDateTime = 4,
+        toFloat = 5,
     }
 }
 declare namespace mdBusinessLogic.dataAccess.entities.generic {
