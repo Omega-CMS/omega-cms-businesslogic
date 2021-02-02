@@ -21,6 +21,12 @@ declare namespace mdBusinessLogic.dataAccess.entities.base {
 }
 declare namespace mdBusinessLogic.helpers {
     class entityHelper {
+        static parseDateAndTimezoneToString(date?: any, timezone?: string, delimiter?: string): string;
+        static parseDateStringValue(data: any, defaultValue?: Date, delimiter?: string): string;
+        static parseDateValue(data: any, defaultValue?: Date, delimiter?: string): Date;
+        static parseTimeZoneValue(data: any, defaultValue?: string, delimiter?: string): string;
+        static getDateValue(data: any, fieldName: string, defaultValue: Date, delimiter?: string): Date;
+        static getTimeZoneValue(data: any, fieldName: string, defaultValue: string, delimiter?: string): string;
         static getValue<T>(data: any, fieldName: string, defaultValue: T): T;
         static getConstructEntityValue<T extends dataAccess.entities.base.IBaseEntity<T> & dataAccess.entities.base.BaseEntity>(data: any, fieldName: string, defaultValue: T, returnNullIfInvalid?: boolean): T;
         static getConstructValue<T extends dataAccess.entities.base.IBaseEntity<T>>(data: any, fieldName: string, defaultValue: T): T;
@@ -33,6 +39,10 @@ declare namespace mdBusinessLogic.dataAccess.entities.base {
         Id: any;
         IsDeleted: boolean;
         constructor(obj?: BaseEntity);
+        static getDateValue(data: any, fieldName: string, defaultValue: Date): Date;
+        getDateValue(data: any, fieldName: string, defaultValue: Date): Date;
+        static getTimeZoneValue(data: any, fieldName: string, defaultValue: string): string;
+        getTimeZoneValue(data: any, fieldName: string, defaultValue: string): string;
         static getValue<T>(data: any, fieldName: string, defaultValue: T): T;
         getValue<T>(data: any, fieldName: string, defaultValue: T): T;
         static getConstructValue<T extends IBaseEntity<T>>(data: any, fieldName: string, defaultValue: T): T;
@@ -591,6 +601,7 @@ declare namespace mdBusinessLogic.dataAccess.controllers {
 declare namespace mdBusinessLogic.dataAccess.entities {
     class omegaCachingObject implements base.IBaseEntity<omegaCachingObject> {
         ByteSize: number;
+        CacheSource: string;
         CacheKey: string;
         Timeout: string;
         CacheTime: Date;
@@ -1930,11 +1941,48 @@ declare namespace mdBusinessLogic {
     }
 }
 declare namespace mdBusinessLogic.dataAccess.entities.generic {
-    class keyValuePair implements base.IBaseEntity<keyValuePair> {
-        Key: string;
-        Value: any;
-        constructor(obj?: keyValuePair);
+    class extendedDateTime implements base.IBaseEntity<extendedDateTime> {
+        value: any;
+        timezone: any;
+        constructor(data?: any);
+        toDate(): Date;
+        toString(): string;
         construct(data: any): void;
+        clone(): extendedDateTime;
+    }
+}
+declare namespace mdBusinessLogic.dataAccess.entities.generic {
+    interface iGenericKeyValuePair<T> {
+        Key: string;
+        Value: T;
+    }
+    class genericKeyValuePair<T> implements base.IBaseEntity<genericKeyValuePair<T>>, iGenericKeyValuePair<T> {
+        Key: string;
+        Value: T;
+        constructor(obj?: iGenericKeyValuePair<T>);
+        construct(data: any): void;
+        clone(): genericKeyValuePair<T>;
+    }
+}
+declare namespace mdBusinessLogic.dataAccess.entities.generic {
+    interface iGenericCollection<T> {
+        Collection?: Array<genericKeyValuePair<T>>;
+    }
+    class genericCollection<T> implements base.IBaseEntity<genericCollection<T>> {
+        private Collection;
+        constructor(obj?: iGenericCollection<T>);
+        getCollection(): Array<genericKeyValuePair<T>>;
+        remove(key: string): void;
+        add(key: string, value: T): void;
+        get(key: string): T;
+        getKeyValuePair(key: string): generic.genericKeyValuePair<T>;
+        construct(data: any): void;
+        clone(): genericCollection<T>;
+    }
+}
+declare namespace mdBusinessLogic.dataAccess.entities.generic {
+    class keyValuePair extends genericKeyValuePair<string> implements base.IBaseEntity<keyValuePair> {
+        constructor(obj?: iGenericKeyValuePair<string>);
         clone(): keyValuePair;
     }
 }
@@ -1978,11 +2026,15 @@ declare namespace mdBusinessLogic.dataAccess.entities.genericContent {
         gridTileData: mdBusinessLogic.dataAccess.entities.grid.gridTileData;
         style: any;
         metadata: Array<generic.keyValuePair>;
-        constraints: iGenericContentFieldJsonFieldConstraint;
+        constraints: generic.genericCollection<iGenericContentFieldJsonFieldConstraint>;
         constructor(obj?: genericContentFieldJsonField);
         construct(data: any): void;
         clone(): genericContentFieldJsonField;
         getStyle(attributeType: entities.attributeTypeEnum): any;
+        getConstraint(key: string): iGenericContentFieldJsonFieldConstraint;
+        getDefaultConstraint(): iGenericContentFieldJsonFieldConstraint;
+        setDefaultConstraint(value: iGenericContentFieldJsonFieldConstraint): void;
+        getRelevantConstraint(): iGenericContentFieldJsonFieldConstraint;
     }
 }
 declare namespace mdBusinessLogic.dataAccess.entities.genericContent {
@@ -1992,7 +2044,7 @@ declare namespace mdBusinessLogic.dataAccess.entities.genericContent {
         userIds?: string[];
         profileId?: string;
         contentTypeId?: string;
-        taxonomyPaths?: string[];
+        taxonomyIds?: string[];
         menuPaths?: string[];
     }
 }
