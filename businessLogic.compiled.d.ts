@@ -959,6 +959,9 @@ declare namespace mdBusinessLogic.dataAccess.entities {
         constructor(obj?: profileType);
         construct(data: any): void;
         clone(): profileType;
+        setFieldValue(value: string, fieldName: string): void;
+        getFieldValue(fieldName: string): string;
+        getField(fieldName: string): profileTypeFieldValue;
     }
 }
 declare namespace mdBusinessLogic.dataAccess.entities {
