@@ -1734,7 +1734,7 @@ declare namespace mdBusinessLogic.dataAccess.controllers {
         save(user: entities.user, onSuccess: (obj: entities.user) => void, onError: (error: helpers.mdException) => void): void;
         assignProfileTypeToUser(profileTypeId: number, userId: number, onSuccess: (obj: entities.user) => void, onError: (error: helpers.mdException) => void): void;
         del(userId: number, onSuccess: (obj: entities.user) => void, onError: (error: helpers.mdException) => void): void;
-        login(username: string, password: string, onSuccess: (obj: entities.loggedOnUser) => void, onError: (error: helpers.mdException) => void): void;
+        login(username: string, password: string, onSuccess: (obj: entities.loggedOnUser) => void, onError: (error: helpers.mdException) => void): string;
         logout(userLoggingOut: entities.loggedOnUser, onSuccess: () => void, onError: (error: helpers.mdException) => void): void;
         getByToken(token: string, onSuccess: (obj: entities.user) => void, onError: (error: helpers.mdException) => void): void;
         resetAccount(username: string, onSuccess: (obj: entities.user) => void, onError: (error: helpers.mdException) => void): void;
