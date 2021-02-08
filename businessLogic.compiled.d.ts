@@ -2203,6 +2203,7 @@ declare namespace mdBusinessLogic.helpers {
         function isFunction(functionToCheck: any): boolean;
         function isArray(obj: any): boolean;
         function isObject(obj: any): boolean;
+        function getTypeName(obj: any): string;
     }
 }
 declare namespace mdBusinessLogic.helpers {
