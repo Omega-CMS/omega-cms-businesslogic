@@ -386,6 +386,8 @@ declare namespace mdBusinessLogic.dataAccess.entities {
         setFieldValue(value: string, fieldName: string): void;
         getFieldValue(fieldName: string): string;
         getField(fieldName: string): T;
+        hasLinkToTitle(): boolean;
+        getLinkToTitle(): T;
         setJsonOptions(jsonOptions: any): void;
     }
 }
@@ -2030,6 +2032,7 @@ declare namespace mdBusinessLogic.dataAccess.entities.genericContent {
         style: any;
         metadata: Array<generic.keyValuePair>;
         constraints: generic.genericCollection<iGenericContentFieldJsonFieldConstraint>;
+        linkToTitle: boolean;
         constructor(obj?: genericContentFieldJsonField);
         construct(data: any): void;
         clone(): genericContentFieldJsonField;
