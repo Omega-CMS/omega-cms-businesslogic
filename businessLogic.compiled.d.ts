@@ -1002,6 +1002,7 @@ declare namespace mdBusinessLogic.dataAccess.entities {
         ChildrenTotalCount: number;
         ContentsTotalCount: number;
         MediaContentTotalCount: number;
+        IsHidden: boolean;
         constructor(obj?: folder<T>);
         construct(data: any): void;
         clone(): folder<T>;
