@@ -1146,7 +1146,7 @@ declare namespace mdBusinessLogic.dataAccess.controllers {
         updateChildren(menu: entities.menu, orderStart: number, onSuccess: (obj: entities.menu) => void, onError: (error: helpers.mdException) => void): void;
         del(id: number, onSuccess: (obj: entities.menu) => void, onError: (error: helpers.mdException) => void): void;
         delContent(id: number, path: string, onSuccess: (obj: entities.menu) => void, onError: (error: helpers.mdException) => void): void;
-        assignContentToMenu(menuId: number, contentId: number, onSuccess: (obj: entities.menu) => void, onError: (error: helpers.mdException) => void): void;
+        assignContentToMenu(menuId: number, contentId: string, onSuccess: (obj: entities.menu) => void, onError: (error: helpers.mdException) => void): void;
         getByMenuPath(path: string, onSuccess: (obj: entities.menu) => void, onError: (error: helpers.mdException) => void): void;
         search(searchData: any, onSuccess: (obj: Array<entities.menu>) => void, onError: (error: helpers.mdException) => void): void;
     }
@@ -1677,8 +1677,8 @@ declare namespace mdBusinessLogic.dataAccess.controllers {
         getHierarchyByParentIdWithContents(id: number, depth: string, loadContents: boolean, onSuccess: (obj: Array<entities.taxonomy>) => void, onError: (error: helpers.mdException) => void): void;
         save(taxonomy: entities.taxonomy, onSuccess: (obj: entities.taxonomy) => void, onError: (error: helpers.mdException) => void): void;
         del(id: number, onSuccess: (obj: entities.taxonomy) => void, onError: (error: helpers.mdException) => void): void;
-        assignContentToTaxonomy(id: number, contentId: number, onSuccess: (obj: entities.taxonomy) => void, onError: (error: helpers.mdException) => void): void;
-        assignContentToTaxonomies(taxonomyIds: Array<number>, contentId: number, onSuccess: (obj: entities.taxonomy) => void, onError: (error: helpers.mdException) => void): void;
+        assignContentToTaxonomy(id: number, contentId: string, onSuccess: (obj: entities.taxonomy) => void, onError: (error: helpers.mdException) => void): void;
+        assignContentToTaxonomies(taxonomyIds: Array<number>, contentId: string, onSuccess: (obj: entities.taxonomy) => void, onError: (error: helpers.mdException) => void): void;
         getByTaxonomyPath(path: string, onSuccess: (obj: entities.taxonomy) => void, onError: (error: helpers.mdException) => void): void;
         delContent(id: number, path: string, onSuccess: (obj: entities.taxonomy) => void, onError: (error: helpers.mdException) => void): void;
     }
@@ -2254,6 +2254,12 @@ declare namespace mdBusinessLogic.helpers {
 declare namespace mdBusinessLogic.helpers {
     module touchScreenHelper {
         function isTouchDevice(): number | true;
+    }
+}
+declare namespace mdBusinessLogic.helpers {
+    module typeConversion {
+        function toInt(value: any, defaultValue?: number, stripNonNumbers?: boolean): number;
+        function toFloat(value: any, defaultValue?: number, stripNonNumbers?: boolean): number;
     }
 }
 declare namespace mdBusinessLogic.helpers.data {
