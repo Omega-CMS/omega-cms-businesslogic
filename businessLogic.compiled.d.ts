@@ -2258,8 +2258,8 @@ declare namespace mdBusinessLogic.helpers {
 }
 declare namespace mdBusinessLogic.helpers {
     module typeConversion {
-        function toInt(value: any, defaultValue?: number, stripNonNumbers?: boolean): number;
-        function toFloat(value: any, defaultValue?: number, stripNonNumbers?: boolean): number;
+        function toInt(value: number | string, defaultValue?: number, stripNonNumbers?: boolean): number;
+        function toFloat(value: number | string, defaultValue?: number, stripNonNumbers?: boolean): number;
     }
 }
 declare namespace mdBusinessLogic.helpers.data {
