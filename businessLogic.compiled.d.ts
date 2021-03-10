@@ -351,6 +351,7 @@ declare namespace mdBusinessLogic.dataAccess.entities {
         ParentArray: Array<taxonomy>;
         ChildrenTotalCount: number;
         ItemsTotalCount: number;
+        Order: number;
         constructor(obj?: taxonomy);
         construct(data: any): void;
         clone(): taxonomy;
