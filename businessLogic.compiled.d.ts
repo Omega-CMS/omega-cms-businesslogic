@@ -1754,6 +1754,7 @@ declare namespace mdBusinessLogic.dataAccess.controllers {
         assignProfileTypeToUser(profileTypeId: number, userId: number, onSuccess: (obj: entities.user) => void, onError: (error: helpers.mdException) => void): void;
         del(userId: number, onSuccess: (obj: entities.user) => void, onError: (error: helpers.mdException) => void): void;
         login(username: string, password: string, onSuccess: (obj: entities.loggedOnUser) => void, onError: (error: helpers.mdException) => void): string;
+        loginAuthData(data: providers.authentication.authData, onSuccess: (obj: entities.loggedOnUser) => void, onError: (error: helpers.mdException) => void): string;
         logout(userLoggingOut: entities.loggedOnUser, onSuccess: () => void, onError: (error: helpers.mdException) => void): void;
         getByToken(token: string, onSuccess: (obj: entities.user) => void, onError: (error: helpers.mdException) => void): void;
         resetAccount(username: string, onSuccess: (obj: entities.user) => void, onError: (error: helpers.mdException) => void): void;
@@ -2179,6 +2180,15 @@ declare namespace mdBusinessLogic.dataAccess.entities.search {
         constructor(obj?: user);
         construct(data: any): void;
         clone(): user;
+    }
+}
+declare namespace mdBusinessLogic.dataAccess.providers.authentication {
+    class authData {
+        Values: any;
+        AuthenticationProviderName: string;
+        constructor(obj?: authData);
+        GetData<T>(key: string, defaultValue?: any): T;
+        SetData<T>(key: string, value: T): void;
     }
 }
 declare namespace mdBusinessLogic.dataAccess.query {
