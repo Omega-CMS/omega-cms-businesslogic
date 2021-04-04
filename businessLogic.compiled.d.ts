@@ -2191,6 +2191,20 @@ declare namespace mdBusinessLogic.dataAccess.providers.authentication {
         SetData<T>(key: string, value: T): void;
     }
 }
+declare namespace mdBusinessLogic.dataAccess.providers.authentication {
+    interface iProvider {
+        id?: string;
+        name?: string;
+        shortcode?: string;
+        data?: any;
+    }
+    class authenticationProviderRegistry {
+        private static _authenticationProviderRegistry;
+        static add(obj: iProvider): boolean;
+        static get(key: any): iProvider;
+        static getAll(): entities.generic.genericCollection<iProvider>;
+    }
+}
 declare namespace mdBusinessLogic.dataAccess.query {
     class queryExpressionGeneric<T, K extends queryExpressionGeneric<T, K>> {
         private field;
