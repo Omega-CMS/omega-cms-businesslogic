@@ -86,15 +86,14 @@ declare namespace mdBusinessLogic {
         }
     }
 }
-declare namespace mdBusinessLogic {
-    namespace globals {
-        var loggedOnUser: dataAccess.entities.loggedOnUser;
-        var loggedOnUserToken: string;
-        var selectedLanguage: string;
-        var systemName: string;
-        var systemVersion: string;
-        var numberAwsSocketRetries: number;
-    }
+declare namespace mdBusinessLogic.globals {
+    var loggedOnUser: dataAccess.entities.loggedOnUser;
+    var loggedOnUserToken: string;
+    var selectedLanguage: string;
+    var systemName: string;
+    var systemVersion: string;
+    var numberAwsSocketRetries: number;
+    var enabledAuthenticationProviders: Array<string>;
 }
 declare namespace mdBusinessLogic.helpers.encoder.base64 {
     var encode: (input: string) => string;
@@ -2197,12 +2196,13 @@ declare namespace mdBusinessLogic.dataAccess.providers.authentication {
         name?: string;
         shortcode?: string;
         data?: any;
+        icon?: string;
     }
     class authenticationProviderRegistry {
         private static _authenticationProviderRegistry;
         static add(obj: iProvider): boolean;
-        static get(key: any): iProvider;
-        static getAll(): entities.generic.genericCollection<iProvider>;
+        static get(key: string): iProvider;
+        static getAll(): Array<entities.generic.genericKeyValuePair<iProvider>>;
     }
 }
 declare namespace mdBusinessLogic.dataAccess.query {
