@@ -1966,6 +1966,8 @@ declare namespace mdBusinessLogic.dataAccess.entities.generic {
     class extendedDateTime implements base.IBaseEntity<extendedDateTime> {
         value: any;
         timezone: any;
+        maxDateTime: any;
+        minDateTime: any;
         constructor(data?: any);
         toDate(): Date;
         toString(): string;
