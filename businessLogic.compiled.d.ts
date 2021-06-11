@@ -2207,6 +2207,25 @@ declare namespace mdBusinessLogic.dataAccess.providers.authentication {
         static getAll(): Array<entities.generic.genericKeyValuePair<iProvider>>;
     }
 }
+declare namespace mdBusinessLogic.dataAccess.providers.uiVisibility {
+    enum iUiVisiblityType {
+        User = 0,
+        Profile = 1
+    }
+    interface iUiVisiblitySetting {
+        type: iUiVisiblityType;
+        id: string;
+        visible: boolean;
+        name: string;
+    }
+    class uiVisibilityProviderRegistry {
+        private static _uiVisiblitySettingsRegistry;
+        static getUniqueName(name: string, type: iUiVisiblityType, id: string): string;
+        static add(obj: iUiVisiblitySetting): boolean;
+        static get(key: string): iUiVisiblitySetting;
+        static getAll(): Array<entities.generic.genericKeyValuePair<iUiVisiblitySetting>>;
+    }
+}
 declare namespace mdBusinessLogic.dataAccess.query {
     class queryExpressionGeneric<T, K extends queryExpressionGeneric<T, K>> {
         private field;
