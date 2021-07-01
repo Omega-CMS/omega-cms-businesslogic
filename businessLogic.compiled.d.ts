@@ -86,6 +86,112 @@ declare namespace mdBusinessLogic {
         }
     }
 }
+declare namespace mdBusinessLogic.helpers.encoder.base64 {
+    var encode: (input: string) => string;
+    var decode: (input: string) => string;
+}
+declare namespace mdBusinessLogic.helpers {
+    var oopHelper: (child: any, parent: any) => void;
+    function loadParentArray(obj: any, parentName: string, parentLinkName: string, parentArray?: Array<any>): Array<any>;
+}
+declare namespace mdBusinessLogic.dataAccess.entities {
+    var isFunction: (functionToCheck: any) => boolean;
+    var isArray: (obj: any) => boolean;
+    var isObject: (obj: any) => boolean;
+    enum entitiesEnum {
+        Content = 1,
+        AttributeTypeDefinition = 2,
+        ContentTypeDefinition = 3,
+        ContentTypeDefinitionField = 4,
+        ContentTypeDefinitionFieldValue = 5,
+        ContentTypeDefinitionFolder = 6,
+        Folder = 7,
+        FolderMediaContentMetaDataField = 8,
+        FolderMetaDataField = 9,
+        MediaContentMetaDataFieldValues = 10,
+        MediaContent = 11,
+        LCID = 12,
+        Culture = 13,
+        MenuContent = 14,
+        ContentAlias = 15,
+        Menu = 16,
+        MetaDataField = 17,
+        MetaDataFieldValue = 18,
+        Permissions = 19,
+        Profile = 20,
+        ProfileType = 21,
+        ProfileTypeField = 22,
+        ProfileTypeFieldValue = 23,
+        Session = 24,
+        TaxonomyContent = 25,
+        Taxonomy = 26,
+        Template = 27,
+        User = 28,
+        RWDPermission = 29,
+        Report = 30,
+        ReportDefinition = 31,
+        ReportData = 32,
+        ReportScheduler = 33,
+        ReportSchedulerAction = 34,
+        ApprovalChain = 35,
+        Step = 36,
+        StepAction = 37,
+        StepUser = 38,
+        MessageFolder = 39,
+        Message = 40,
+        ApprovalChainApproval = 41,
+        ContentTypeDefinitionDataSource = 42,
+        ContentTypeDefinitionDataSourceJoin = 44,
+        ContentTypeDefinitionFolderDataBoundCondition = 45,
+        ContentTypeDefinitionFolderDataBoundSync = 46
+    }
+}
+declare namespace mdBusinessLogic.dataAccess.entities.permissions {
+    enum permissionAccessTypeEnum {
+        Read = 1,
+        Write = 2,
+        Delete = 3
+    }
+}
+declare namespace mdBusinessLogic.dataAccess.entities.permissions {
+    class entityPermission {
+        Object: entitiesEnum;
+        Entity: entitiesEnum;
+        AccessTypes: Array<permissionAccessTypeEnum>;
+        constructor();
+    }
+}
+declare namespace mdBusinessLogic.dataAccess.entities.permissions {
+    class objectPermission {
+        AccessTypes: Array<permissionAccessTypeEnum>;
+        Object: entitiesEnum;
+        ObjectId: string;
+        constructor();
+    }
+}
+declare namespace mdBusinessLogic.dataAccess.entities.permissions {
+    class permissionsBase extends base.BaseEntity {
+        EntityPermissions: Array<entityPermission>;
+        ObjectPermissions: Array<objectPermission>;
+        constructor(obj?: permissionsBase);
+    }
+}
+declare namespace mdBusinessLogic.dataAccess.entities.permissions {
+    class profileTypePermissions extends permissionsBase implements base.IBaseEntity<profileTypePermissions> {
+        ProfileId: number;
+        constructor(obj?: profileTypePermissions);
+        construct(data: profileTypePermissions): void;
+        clone(): profileTypePermissions;
+    }
+}
+declare namespace mdBusinessLogic.dataAccess.entities.permissions {
+    class userPermissions extends permissionsBase implements base.IBaseEntity<userPermissions> {
+        UserId: number;
+        constructor(obj?: userPermissions);
+        construct(data: userPermissions): void;
+        clone(): userPermissions;
+    }
+}
 declare namespace mdBusinessLogic.globals {
     var loggedOnUser: dataAccess.entities.loggedOnUser;
     var loggedOnUserToken: string;
@@ -94,14 +200,8 @@ declare namespace mdBusinessLogic.globals {
     var systemVersion: string;
     var numberAwsSocketRetries: number;
     var enabledAuthenticationProviders: Array<string>;
-}
-declare namespace mdBusinessLogic.helpers.encoder.base64 {
-    var encode: (input: string) => string;
-    var decode: (input: string) => string;
-}
-declare namespace mdBusinessLogic.helpers {
-    var oopHelper: (child: any, parent: any) => void;
-    function loadParentArray(obj: any, parentName: string, parentLinkName: string, parentArray?: Array<any>): Array<any>;
+    var loggedOnProfileTypePermissions: Array<dataAccess.entities.permissions.profileTypePermissions>;
+    var loggedOnUserPermissions: Array<dataAccess.entities.permissions.userPermissions>;
 }
 declare namespace mdBusinessLogic {
     namespace dataAccess {
@@ -695,58 +795,6 @@ declare namespace mdBusinessLogic {
     }
 }
 declare namespace mdBusinessLogic.dataAccess.entities {
-    var isFunction: (functionToCheck: any) => boolean;
-    var isArray: (obj: any) => boolean;
-    var isObject: (obj: any) => boolean;
-    enum entitiesEnum {
-        Content = 1,
-        AttributeTypeDefinition = 2,
-        ContentTypeDefinition = 3,
-        ContentTypeDefinitionField = 4,
-        ContentTypeDefinitionFieldValue = 5,
-        ContentTypeDefinitionFolder = 6,
-        Folder = 7,
-        FolderMediaContentMetaDataField = 8,
-        FolderMetaDataField = 9,
-        MediaContentMetaDataFieldValues = 10,
-        MediaContent = 11,
-        LCID = 12,
-        Culture = 13,
-        MenuContent = 14,
-        ContentAlias = 15,
-        Menu = 16,
-        MetaDataField = 17,
-        MetaDataFieldValue = 18,
-        Permissions = 19,
-        Profile = 20,
-        ProfileType = 21,
-        ProfileTypeField = 22,
-        ProfileTypeFieldValue = 23,
-        Session = 24,
-        TaxonomyContent = 25,
-        Taxonomy = 26,
-        Template = 27,
-        User = 28,
-        RWDPermission = 29,
-        Report = 30,
-        ReportDefinition = 31,
-        ReportData = 32,
-        ReportScheduler = 33,
-        ReportSchedulerAction = 34,
-        ApprovalChain = 35,
-        Step = 36,
-        StepAction = 37,
-        StepUser = 38,
-        MessageFolder = 39,
-        Message = 40,
-        ApprovalChainApproval = 41,
-        ContentTypeDefinitionDataSource = 42,
-        ContentTypeDefinitionDataSourceJoin = 44,
-        ContentTypeDefinitionFolderDataBoundCondition = 45,
-        ContentTypeDefinitionFolderDataBoundSync = 46
-    }
-}
-declare namespace mdBusinessLogic.dataAccess.entities {
     class approvalChain extends base.BaseEntity implements base.IBaseEntity<approvalChain> {
         FolderId: number;
         IsActive: boolean;
@@ -1253,44 +1301,6 @@ declare namespace mdBusinessLogic.dataAccess.controllers {
         getByContent(content: entities.content, onSuccess: (obj: Array<entities.metaDataFieldValue>) => void, onError: (error: helpers.mdException) => void): void;
     }
 }
-declare namespace mdBusinessLogic.dataAccess.entities.permissions {
-    enum permissionAccessTypeEnum {
-        Read = 1,
-        Write = 2,
-        Delete = 3
-    }
-}
-declare namespace mdBusinessLogic.dataAccess.entities.permissions {
-    class entityPermission {
-        Object: entitiesEnum;
-        Entity: entitiesEnum;
-        AccessTypes: Array<permissionAccessTypeEnum>;
-        constructor();
-    }
-}
-declare namespace mdBusinessLogic.dataAccess.entities.permissions {
-    class objectPermission {
-        AccessTypes: Array<permissionAccessTypeEnum>;
-        Object: entitiesEnum;
-        ObjectId: string;
-        constructor();
-    }
-}
-declare namespace mdBusinessLogic.dataAccess.entities.permissions {
-    class permissionsBase extends base.BaseEntity {
-        EntityPermissions: Array<entityPermission>;
-        ObjectPermissions: Array<objectPermission>;
-        constructor(obj?: permissionsBase);
-    }
-}
-declare namespace mdBusinessLogic.dataAccess.entities.permissions {
-    class profileTypePermissions extends permissionsBase implements base.IBaseEntity<profileTypePermissions> {
-        ProfileId: number;
-        constructor(obj?: profileTypePermissions);
-        construct(data: profileTypePermissions): void;
-        clone(): profileTypePermissions;
-    }
-}
 declare namespace mdBusinessLogic.dataAccess.controllers {
     class permissionControllerProfileType extends base.BaseController<permissionControllerProfileType, entities.permissions.profileTypePermissions> {
         constructor();
@@ -1300,14 +1310,6 @@ declare namespace mdBusinessLogic.dataAccess.controllers {
         savePermissions(permissions: Array<entities.permissions.profileTypePermissions>, onSuccess: (obj: Array<entities.permissions.profileTypePermissions>) => void, onError: (error: helpers.mdException) => void): void;
         getLoggedOnProfileTypePermissionsSocket(requestId: string, onSuccess: (obj: Array<entities.permissions.profileTypePermissions>, socket: WebSocket) => void, onError: (error: helpers.mdException, socket: WebSocket) => void): string;
         getLoggedOnProfileTypePermissions(onSuccess: (obj: Array<entities.permissions.profileTypePermissions>) => void, onError: (error: helpers.mdException) => void): void;
-    }
-}
-declare namespace mdBusinessLogic.dataAccess.entities.permissions {
-    class userPermissions extends permissionsBase implements base.IBaseEntity<userPermissions> {
-        UserId: number;
-        constructor(obj?: userPermissions);
-        construct(data: userPermissions): void;
-        clone(): userPermissions;
     }
 }
 declare namespace mdBusinessLogic.dataAccess.controllers {
@@ -2341,6 +2343,28 @@ declare namespace mdBusinessLogic.helpers.data {
         toLong = 3,
         toDateTime = 4,
         toFloat = 5
+    }
+}
+declare namespace mdBusinessLogic.settings {
+    enum adminEventTypes {
+        onTransitionBefore = 0,
+        onTransitionSuccess = 1,
+        onTransitionError = 2,
+        ajaxOnComplete = 3,
+        ajaxOnBeforeSend = 4,
+        ajaxOnUnauthorized = 5,
+        ajaxOnForbidden = 6,
+        ajaxOnJsonSerialize = 7
+    }
+    class adminEvent {
+        type: adminEventTypes;
+        event: any;
+    }
+    class admin {
+        private static adminEvents;
+        private static getEventsByType;
+        static registerAdminEvent(adminEvent?: adminEvent): void;
+        static onEvent(type: adminEventTypes, args: any): void;
     }
 }
 declare namespace mdBusinessLogic.settings {
