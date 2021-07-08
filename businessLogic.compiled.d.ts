@@ -2357,23 +2357,20 @@ declare namespace mdBusinessLogic.settings {
         ajaxOnJsonSerialize = 7
     }
     class adminEvent {
-        type: adminEventTypes;
-        event: any;
+        private type;
+        private event;
+        constructor(type: adminEventTypes, event: Function);
+        getType(): adminEventTypes;
+        getPromise(...args: any[]): Promise<any>;
     }
     class admin {
         private static adminEvents;
-        private static getEventsByType;
         static registerAdminEvent(adminEvent?: adminEvent): void;
-        static onEvent(type: adminEventTypes, args: any): void;
+        static onEvent(type: adminEventTypes, ...args: any[]): Promise<any[]>;
     }
 }
 declare namespace mdBusinessLogic.settings {
     module ajax {
-        function onComplete(xhr: any): void;
-        function onBeforeSend(xhr: XMLHttpRequest): void;
-        function onUnauthorized(error: mdBusinessLogic.helpers.mdException): void;
-        function onForbidden(error: mdBusinessLogic.helpers.mdException): void;
-        function onJsonSerialize(nonSerializedRequest: any): any;
         interface connectionObject<T> {
             id: string;
             obj: T;
