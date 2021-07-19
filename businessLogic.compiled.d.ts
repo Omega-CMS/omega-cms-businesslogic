@@ -2356,7 +2356,8 @@ declare namespace mdBusinessLogic.settings {
         ajaxOnForbidden = 6,
         ajaxOnJsonSerialize = 7,
         onLogin = 8,
-        onLogout = 9
+        onLogout = 9,
+        onLogedInAndPermissionsLoaded = 10
     }
     class adminEvent {
         private type;
