@@ -2315,6 +2315,11 @@ declare namespace mdBusinessLogic.helpers {
     }
 }
 declare namespace mdBusinessLogic.helpers {
+    class math {
+        static random(): number;
+    }
+}
+declare namespace mdBusinessLogic.helpers {
     module touchScreenHelper {
         function isTouchDevice(): number | true;
     }
