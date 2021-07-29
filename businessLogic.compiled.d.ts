@@ -1251,6 +1251,7 @@ declare namespace mdBusinessLogic.dataAccess.controllers {
         replaceMultiple(messages: any, onSuccess: (obj: Array<entities.message>) => void, onError: (error: helpers.mdException) => void): void;
         search(searchData: any, onSuccess: (obj: Array<entities.message>) => void, onError: (error: helpers.mdException) => void): void;
         getUnreadByUser(requestId: string, onSuccess: (obj: Array<entities.message>, socket: WebSocket) => void, onError: (error: helpers.mdException, socket: WebSocket) => void): string;
+        getAllChats(onSuccess: (obj: entities.paginationEntity<entities.message>) => void, onError: (error: helpers.mdException) => void): void;
     }
 }
 declare namespace mdBusinessLogic.dataAccess.entities {
