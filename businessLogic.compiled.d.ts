@@ -307,6 +307,45 @@ declare namespace mdBusinessLogic.dataAccess.entities.exceptions {
         clone(): errorDetails;
     }
 }
+declare namespace mdBusinessLogic.dataAccess.entities.comm {
+    class socketModel implements base.IBaseEntity<socketModel> {
+        message: string;
+        connectionId: string;
+        constructor(obj?: socketModel);
+        construct(data: any): void;
+        clone(): socketModel;
+    }
+}
+declare namespace mdBusinessLogic.dataAccess.entities.comm {
+    class awsSocketModel extends socketModel implements base.IBaseEntity<awsSocketModel> {
+        requestId: string;
+        constructor(obj?: awsSocketModel);
+        construct(data: any): void;
+        clone(): awsSocketModel;
+    }
+    enum executionScheduleType {
+        Manual = 0,
+        Recurring = 1
+    }
+}
+declare namespace mdBusinessLogic.dataAccess.controllers.base {
+    abstract class BaseController<C, E extends entities.base.IBaseEntity<E>> extends BaseController_helpers {
+        private controllerBase;
+        constructor(controllerBase: string);
+        getAddress(endpoint: string, data?: any, includeBase?: boolean): string;
+        private generateNonSecureRequestSocket;
+        private generateNonSecureRequestXhr;
+        private generateNonSecureRequest;
+        private setHeaders;
+        private prepareFormData;
+        private prepareSubFormItems;
+        _get(options: AjaxMethodOptions<C, E>): void;
+        _post(options: AjaxMethodOptions<C, E>): void;
+        _put(options: AjaxMethodOptions<C, E>): void;
+        _delete(options: AjaxMethodOptions<C, E>): void;
+        _socket(options: AjaxMethodOptions<C, E>): void;
+    }
+}
 declare namespace mdBusinessLogic.dataAccess.entities {
     class attributeTypeDefinition extends base.BaseEntity implements base.IBaseEntity<attributeTypeDefinition> {
         Name: string;
@@ -511,243 +550,6 @@ declare namespace mdBusinessLogic.dataAccess.entities {
         clone(): content;
     }
 }
-declare namespace mdBusinessLogic.dataAccess.entities {
-    class mediaContentMetaDataFeldValues extends metaDataField implements base.IBaseEntity<mediaContentMetaDataFeldValues> {
-        MediaContentId: number;
-        DateCreated: Date;
-        Value: string;
-        MetaDataFieldId: number;
-        constructor(obj?: mediaContentMetaDataFeldValues);
-        construct(data: any): void;
-        clone(): mediaContentMetaDataFeldValues;
-    }
-}
-declare namespace mdBusinessLogic.dataAccess.entities {
-    class mediaContent extends base.BaseEntity implements base.IBaseEntity<mediaContent> {
-        Id: number;
-        LCID: number;
-        Size: string;
-        Path: string;
-        FileType: number;
-        FolderId: number;
-        Name: string;
-        Description: string;
-        Type: any;
-        InputType: mediaContentInputType;
-        MediaContentMetaDataFieldValues: Array<mediaContentMetaDataFeldValues>;
-        PreviewUrl: string;
-        FullNameFile: string;
-        Icon: string;
-        DateCreated: Date;
-        UniqueId: string;
-        constructor(obj?: mediaContent);
-        construct(data: any): void;
-        clone(): mediaContent;
-    }
-    enum mediaContentInputType {
-        jpg = 1,
-        txt = 2,
-        mp4 = 3,
-        JPG = 4,
-        png = 5,
-        PNG = 6,
-        flv = 7,
-        mkv = 8,
-        jpeg = 9,
-        JPEG = 10,
-        pdf = 11,
-        docx = 12,
-        xls = 13,
-        xlsx = 14
-    }
-}
-declare namespace mdBusinessLogic.dataAccess.entities {
-    abstract class editable implements base.IBaseEntity<editable> {
-        Edit: boolean;
-        constructor(edit: boolean);
-        construct(data: any): void;
-        clone(): editable;
-    }
-    class length extends editable implements base.IBaseEntity<length> {
-        Length: number;
-        constructor(obj?: length);
-        construct(data: any): void;
-        clone(): length;
-    }
-    class casing extends editable implements base.IBaseEntity<casing> {
-        UpperCase: boolean;
-        LowerCase: boolean;
-        constructor(obj?: casing);
-        construct(data: any): void;
-        clone(): casing;
-    }
-    class specialCharacters extends editable implements base.IBaseEntity<specialCharacters> {
-        Included: Array<string>;
-        constructor(obj?: specialCharacters);
-        construct(data: any): void;
-        clone(): specialCharacters;
-    }
-    class numbers extends editable implements base.IBaseEntity<numbers> {
-        From: number;
-        To: number;
-        constructor(obj?: numbers);
-        construct(data: any): void;
-        clone(): numbers;
-    }
-    class characterTypes extends editable implements base.IBaseEntity<characterTypes> {
-        Letters: boolean;
-        Casing: casing;
-        SpecialCharacters: specialCharacters;
-        Numbers: numbers;
-        constructor(obj?: characterTypes);
-        construct(data: any): void;
-        clone(): characterTypes;
-    }
-    class email extends editable implements base.IBaseEntity<email> {
-        Domain: string;
-        Extension: string;
-        constructor(obj?: email);
-        construct(data: any): void;
-        clone(): email;
-    }
-    class webAddress extends editable implements base.IBaseEntity<webAddress> {
-        Includes: Array<string>;
-        Protocols: Array<string>;
-        constructor(obj?: webAddress);
-        construct(data: any): void;
-        clone(): webAddress;
-    }
-    class typeValidation extends editable implements base.IBaseEntity<typeValidation> {
-        Email: email;
-        WebAddress: webAddress;
-        constructor(obj?: typeValidation);
-        construct(data: any): void;
-        clone(): typeValidation;
-    }
-    class fieldValidation implements base.IBaseEntity<fieldValidation> {
-        MinLength: length;
-        MaxLength: length;
-        CharacterTypes: characterTypes;
-        TypeValidation: typeValidation;
-        Regex: string;
-        Required: boolean;
-        Repeatable: boolean;
-        constructor(obj?: fieldValidation);
-        construct(data: any): void;
-        clone(): fieldValidation;
-    }
-}
-declare namespace mdBusinessLogic.dataAccess.entities {
-    class profileTypeFieldJsonField implements base.IBaseEntity<profileTypeFieldJsonField> {
-        validation: fieldValidation;
-        helpText: string;
-        access: string;
-        cssClass: string;
-        toggle: string;
-        hidden: boolean;
-        enabled: boolean;
-        constructor(obj?: profileTypeFieldJsonField);
-        construct(data: any): void;
-        clone(): profileTypeFieldJsonField;
-    }
-}
-declare namespace mdBusinessLogic.dataAccess.entities {
-    class profileTypeField extends entities.genericContent.genericContentField implements base.IBaseEntity<profileTypeField> {
-        ProfileTypeId: number;
-        constructor(obj?: profileTypeField);
-        construct(data: any): void;
-        clone(): profileTypeField;
-    }
-}
-declare namespace mdBusinessLogic.dataAccess.entities {
-    class profileTypeFieldValue extends entities.genericContent.genericContentFieldValue implements base.IBaseEntity<profileTypeFieldValue> {
-        ProfileTypeFieldId: number;
-        ProfileTypeId: number;
-        UserId: number;
-        constructor(obj?: profileTypeFieldValue);
-        construct(data: any): void;
-        clone(): profileTypeFieldValue;
-    }
-}
-declare namespace mdBusinessLogic.dataAccess.entities {
-    class rwdPermission extends base.BaseEntity implements base.IBaseEntity<rwdPermission> {
-        Read: boolean;
-        Write: boolean;
-        Delete: boolean;
-        Target: rwdPermissionTargetEnum;
-        TargetPrimaryKey: string;
-        constructor(obj?: rwdPermission);
-        construct(data: any): void;
-        clone(): rwdPermission;
-    }
-    enum rwdPermissionTargetEnum {
-        None = 0,
-        Folder = 1,
-        Content = 2,
-        MediaContent = 3
-    }
-}
-declare namespace mdBusinessLogic.dataAccess.entities {
-    class profileType extends base.BaseEntity implements base.IBaseEntity<profileType> {
-        Name: string;
-        Icon: string;
-        Description: string;
-        PermissionXmlText: string;
-        Fields: Array<profileTypeFieldValue>;
-        IsAssigned: boolean;
-        RWDPermissions: Array<rwdPermission>;
-        constructor(obj?: profileType);
-        construct(data: any): void;
-        clone(): profileType;
-        setFieldValue(value: string, fieldName: string): void;
-        getFieldValue(fieldName: string): string;
-        getField(fieldName: string): profileTypeFieldValue;
-    }
-}
-declare namespace mdBusinessLogic.dataAccess.entities {
-    class folderMetaDataField extends base.BaseEntity implements base.IBaseEntity<folderMetaDataField> {
-        FolderId: number;
-        MetaDataFieldId: number;
-        IsRequired: boolean;
-        Checked: boolean;
-        Name: string;
-        constructor(obj?: folderMetaDataField);
-        construct(data: any): void;
-        clone(): folderMetaDataField;
-    }
-}
-declare namespace mdBusinessLogic.dataAccess.entities.aws.socket {
-    class awsSocketModel implements base.IBaseEntity<awsSocketModel> {
-        message: string;
-        connectionId: string;
-        requestId: string;
-        constructor(obj?: awsSocketModel);
-        construct(data: any): void;
-        clone(): awsSocketModel;
-    }
-    enum executionScheduleType {
-        Manual = 0,
-        Recurring = 1
-    }
-}
-declare namespace mdBusinessLogic.dataAccess.controllers.base {
-    abstract class BaseController<C, E extends entities.base.IBaseEntity<E>> extends BaseController_helpers {
-        private controllerBase;
-        constructor(controllerBase: string);
-        getAddress(endpoint: string, data?: any, includeBase?: boolean): string;
-        private generateNonSecureRequestSocket;
-        private generateNonSecureRequestXhr;
-        private generateNonSecureRequest;
-        private setHeaders;
-        private prepareFormData;
-        private prepareSubFormItems;
-        _get(options: AjaxMethodOptions<C, E>): void;
-        _post(options: AjaxMethodOptions<C, E>): void;
-        _put(options: AjaxMethodOptions<C, E>): void;
-        _delete(options: AjaxMethodOptions<C, E>): void;
-        _socket(options: AjaxMethodOptions<C, E>): void;
-    }
-}
 declare namespace mdBusinessLogic.dataAccess.controllers.options {
     interface iContentRequestOptions {
         ContentIds?: Array<string>;
@@ -908,6 +710,82 @@ declare namespace mdBusinessLogic.dataAccess.controllers {
     }
 }
 declare namespace mdBusinessLogic.dataAccess.entities {
+    abstract class editable implements base.IBaseEntity<editable> {
+        Edit: boolean;
+        constructor(edit: boolean);
+        construct(data: any): void;
+        clone(): editable;
+    }
+    class length extends editable implements base.IBaseEntity<length> {
+        Length: number;
+        constructor(obj?: length);
+        construct(data: any): void;
+        clone(): length;
+    }
+    class casing extends editable implements base.IBaseEntity<casing> {
+        UpperCase: boolean;
+        LowerCase: boolean;
+        constructor(obj?: casing);
+        construct(data: any): void;
+        clone(): casing;
+    }
+    class specialCharacters extends editable implements base.IBaseEntity<specialCharacters> {
+        Included: Array<string>;
+        constructor(obj?: specialCharacters);
+        construct(data: any): void;
+        clone(): specialCharacters;
+    }
+    class numbers extends editable implements base.IBaseEntity<numbers> {
+        From: number;
+        To: number;
+        constructor(obj?: numbers);
+        construct(data: any): void;
+        clone(): numbers;
+    }
+    class characterTypes extends editable implements base.IBaseEntity<characterTypes> {
+        Letters: boolean;
+        Casing: casing;
+        SpecialCharacters: specialCharacters;
+        Numbers: numbers;
+        constructor(obj?: characterTypes);
+        construct(data: any): void;
+        clone(): characterTypes;
+    }
+    class email extends editable implements base.IBaseEntity<email> {
+        Domain: string;
+        Extension: string;
+        constructor(obj?: email);
+        construct(data: any): void;
+        clone(): email;
+    }
+    class webAddress extends editable implements base.IBaseEntity<webAddress> {
+        Includes: Array<string>;
+        Protocols: Array<string>;
+        constructor(obj?: webAddress);
+        construct(data: any): void;
+        clone(): webAddress;
+    }
+    class typeValidation extends editable implements base.IBaseEntity<typeValidation> {
+        Email: email;
+        WebAddress: webAddress;
+        constructor(obj?: typeValidation);
+        construct(data: any): void;
+        clone(): typeValidation;
+    }
+    class fieldValidation implements base.IBaseEntity<fieldValidation> {
+        MinLength: length;
+        MaxLength: length;
+        CharacterTypes: characterTypes;
+        TypeValidation: typeValidation;
+        Regex: string;
+        Required: boolean;
+        Repeatable: boolean;
+        constructor(obj?: fieldValidation);
+        construct(data: any): void;
+        clone(): fieldValidation;
+    }
+}
+declare namespace mdBusinessLogic.dataAccess.entities {
     class contentTypeDefinitionField extends entities.genericContent.genericContentField implements base.IBaseEntity<contentTypeDefinitionField> {
         ContentTypeDefinitionId: number;
         constructor(obj?: contentTypeDefinitionField);
@@ -1039,6 +917,135 @@ declare namespace mdBusinessLogic.dataAccess.controllers {
     class fileController extends base.BaseController<folderController, entities.primitiveType<any>> {
         constructor();
         upload(file: entities.file, onSuccess: (obj: any) => void, onError: (error: helpers.mdException) => void): void;
+    }
+}
+declare namespace mdBusinessLogic.dataAccess.entities {
+    class mediaContentMetaDataFeldValues extends metaDataField implements base.IBaseEntity<mediaContentMetaDataFeldValues> {
+        MediaContentId: number;
+        DateCreated: Date;
+        Value: string;
+        MetaDataFieldId: number;
+        constructor(obj?: mediaContentMetaDataFeldValues);
+        construct(data: any): void;
+        clone(): mediaContentMetaDataFeldValues;
+    }
+}
+declare namespace mdBusinessLogic.dataAccess.entities {
+    class mediaContent extends base.BaseEntity implements base.IBaseEntity<mediaContent> {
+        Id: number;
+        LCID: number;
+        Size: string;
+        Path: string;
+        FileType: number;
+        FolderId: number;
+        Name: string;
+        Description: string;
+        Type: any;
+        InputType: mediaContentInputType;
+        MediaContentMetaDataFieldValues: Array<mediaContentMetaDataFeldValues>;
+        PreviewUrl: string;
+        FullNameFile: string;
+        Icon: string;
+        DateCreated: Date;
+        UniqueId: string;
+        constructor(obj?: mediaContent);
+        construct(data: any): void;
+        clone(): mediaContent;
+    }
+    enum mediaContentInputType {
+        jpg = 1,
+        txt = 2,
+        mp4 = 3,
+        JPG = 4,
+        png = 5,
+        PNG = 6,
+        flv = 7,
+        mkv = 8,
+        jpeg = 9,
+        JPEG = 10,
+        pdf = 11,
+        docx = 12,
+        xls = 13,
+        xlsx = 14
+    }
+}
+declare namespace mdBusinessLogic.dataAccess.entities {
+    class profileTypeFieldJsonField implements base.IBaseEntity<profileTypeFieldJsonField> {
+        validation: fieldValidation;
+        helpText: string;
+        access: string;
+        cssClass: string;
+        toggle: string;
+        hidden: boolean;
+        enabled: boolean;
+        constructor(obj?: profileTypeFieldJsonField);
+        construct(data: any): void;
+        clone(): profileTypeFieldJsonField;
+    }
+}
+declare namespace mdBusinessLogic.dataAccess.entities {
+    class profileTypeField extends entities.genericContent.genericContentField implements base.IBaseEntity<profileTypeField> {
+        ProfileTypeId: number;
+        constructor(obj?: profileTypeField);
+        construct(data: any): void;
+        clone(): profileTypeField;
+    }
+}
+declare namespace mdBusinessLogic.dataAccess.entities {
+    class profileTypeFieldValue extends entities.genericContent.genericContentFieldValue implements base.IBaseEntity<profileTypeFieldValue> {
+        ProfileTypeFieldId: number;
+        ProfileTypeId: number;
+        UserId: number;
+        constructor(obj?: profileTypeFieldValue);
+        construct(data: any): void;
+        clone(): profileTypeFieldValue;
+    }
+}
+declare namespace mdBusinessLogic.dataAccess.entities {
+    class rwdPermission extends base.BaseEntity implements base.IBaseEntity<rwdPermission> {
+        Read: boolean;
+        Write: boolean;
+        Delete: boolean;
+        Target: rwdPermissionTargetEnum;
+        TargetPrimaryKey: string;
+        constructor(obj?: rwdPermission);
+        construct(data: any): void;
+        clone(): rwdPermission;
+    }
+    enum rwdPermissionTargetEnum {
+        None = 0,
+        Folder = 1,
+        Content = 2,
+        MediaContent = 3
+    }
+}
+declare namespace mdBusinessLogic.dataAccess.entities {
+    class profileType extends base.BaseEntity implements base.IBaseEntity<profileType> {
+        Name: string;
+        Icon: string;
+        Description: string;
+        PermissionXmlText: string;
+        Fields: Array<profileTypeFieldValue>;
+        IsAssigned: boolean;
+        RWDPermissions: Array<rwdPermission>;
+        constructor(obj?: profileType);
+        construct(data: any): void;
+        clone(): profileType;
+        setFieldValue(value: string, fieldName: string): void;
+        getFieldValue(fieldName: string): string;
+        getField(fieldName: string): profileTypeFieldValue;
+    }
+}
+declare namespace mdBusinessLogic.dataAccess.entities {
+    class folderMetaDataField extends base.BaseEntity implements base.IBaseEntity<folderMetaDataField> {
+        FolderId: number;
+        MetaDataFieldId: number;
+        IsRequired: boolean;
+        Checked: boolean;
+        Name: string;
+        constructor(obj?: folderMetaDataField);
+        construct(data: any): void;
+        clone(): folderMetaDataField;
     }
 }
 declare namespace mdBusinessLogic.dataAccess.entities {
