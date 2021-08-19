@@ -1316,7 +1316,7 @@ declare namespace mdBusinessLogic.dataAccess.controllers {
         getProfileTypePermissionsByEntity(entity: entities.entitiesEnum, entityId: number, onSuccess: (obj: Array<entities.permissions.profileTypePermissions>) => void, onError: (error: helpers.mdException) => void): void;
         getProfileTypePermissionsByEntities(entity: entities.entitiesEnum, entityIds: Array<number>, onSuccess: (obj: Array<entities.permissions.profileTypePermissions>) => void, onError: (error: helpers.mdException) => void): void;
         savePermissions(permissions: Array<entities.permissions.profileTypePermissions>, onSuccess: (obj: Array<entities.permissions.profileTypePermissions>) => void, onError: (error: helpers.mdException) => void): void;
-        getLoggedOnProfileTypePermissionsSocket(requestId: string, onSuccess: (obj: Array<entities.permissions.profileTypePermissions>, socket: WebSocket) => void, onError: (error: helpers.mdException, socket: WebSocket) => void): string;
+        getLoggedOnProfileTypePermissionsSocket(requestId: string, token: string, onSuccess: (obj: Array<entities.permissions.profileTypePermissions>, socket: WebSocket) => void, onError: (error: helpers.mdException, socket: WebSocket) => void): string;
         getLoggedOnProfileTypePermissions(onSuccess: (obj: Array<entities.permissions.profileTypePermissions>) => void, onError: (error: helpers.mdException) => void): void;
     }
 }
@@ -1327,7 +1327,7 @@ declare namespace mdBusinessLogic.dataAccess.controllers {
         getUserPermissionsByEntity(entity: entities.entitiesEnum, entityId: number, onSuccess: (obj: Array<entities.permissions.userPermissions>) => void, onError: (error: helpers.mdException) => void): void;
         getUserPermissionsByEntities(entity: entities.entitiesEnum, entityIds: Array<number>, onSuccess: (obj: Array<entities.permissions.userPermissions>) => void, onError: (error: helpers.mdException) => void): void;
         savePermissions(permissions: Array<entities.permissions.userPermissions>, onSuccess: (obj: Array<entities.permissions.userPermissions>) => void, onError: (error: helpers.mdException) => void): void;
-        getLoggedOnUserPermissionsSocket(requestId: string, onSuccess: (obj: Array<entities.permissions.userPermissions>, socket: WebSocket) => void, onError: (error: helpers.mdException, socket: WebSocket) => void): string;
+        getLoggedOnUserPermissionsSocket(requestId: string, token: string, onSuccess: (obj: Array<entities.permissions.userPermissions>, socket: WebSocket) => void, onError: (error: helpers.mdException, socket: WebSocket) => void): string;
         getLoggedOnUserPermissions(onSuccess: (obj: Array<entities.permissions.userPermissions>) => void, onError: (error: helpers.mdException) => void): void;
     }
 }
