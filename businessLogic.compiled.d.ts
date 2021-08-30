@@ -262,6 +262,7 @@ declare namespace mdBusinessLogic.dataAccess.controllers.base {
         lcid: number;
         onSuccess: (data: AjaxMethodData<C, E>) => void;
         onError: (data: AjaxMethodData<C, E>) => void;
+        isInitCall: boolean;
         constructor(requestId?: string);
         getFullUrl(prefix?: string): string;
         private getAddressWithCacheFlag;
@@ -1664,10 +1665,15 @@ declare namespace mdBusinessLogic.dataAccess.entities {
     }
 }
 declare namespace mdBusinessLogic.dataAccess.controllers {
-    class systemInfoController extends base.BaseController<systemInfoController, entities.hardwareInfoPerformance | entities.pluginJob> {
+    class systemInfoController extends base.BaseController<systemInfoController, entities.hardwareInfoPerformance | entities.pluginJob | entities.models.initModel> {
+        private static _isInitialized;
+        private static _initCallInProgress;
+        static processPreInit(callback: any): void;
+        static getIsInitialized(): boolean;
         constructor();
         getPerformance(requestId: string, delay: number, onSuccess: (obj: entities.hardwareInfoPerformance, socket: WebSocket) => void, onError: (error: helpers.mdException, socket: WebSocket) => void): void;
         getPluginJobs(requestId: string, onSuccess: (obj: Array<entities.pluginJob>, socket: WebSocket) => void, onError: (error: helpers.mdException, socket: WebSocket) => void): string;
+        getInit(onSuccess: (obj: entities.models.initModel) => void, onError: (error: helpers.mdException) => void): void;
     }
 }
 declare namespace mdBusinessLogic.dataAccess.controllers {
@@ -2081,6 +2087,14 @@ declare namespace mdBusinessLogic.dataAccess.entities.genericContent {
         contentTypeId?: string;
         taxonomyIds?: string[];
         menuPaths?: string[];
+    }
+}
+declare namespace mdBusinessLogic.dataAccess.entities.models {
+    class initModel implements base.IBaseEntity<initModel> {
+        Initiated: boolean;
+        constructor(obj?: initModel);
+        construct(data: any): void;
+        clone(): initModel;
     }
 }
 declare namespace mdBusinessLogic.dataAccess.entities.permissions {
