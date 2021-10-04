@@ -59,15 +59,15 @@ declare namespace mdBusinessLogic.dataAccess.entities.base {
 declare namespace mdBusinessLogic.dataAccess.entities {
     class user extends base.BaseEntity implements base.IBaseEntity<user> {
         Username: string;
-        Password: string;
         ProfileTypes: Array<any>;
         ProfileTypeId: number;
-        OldPassword: string;
         Token: string;
         DateRefreshToken: Date;
         RWDPermissions: Array<any>;
         AdministrationAllowed: boolean;
         IsRoot: boolean;
+        AuthenticationProvider: string;
+        ReferenceId: string;
         constructor(obj?: user);
         construct(data: any): void;
         clone(): user;
@@ -1756,8 +1756,9 @@ declare namespace mdBusinessLogic.dataAccess.controllers {
     }
 }
 declare namespace mdBusinessLogic.dataAccess.controllers {
-    class userController extends base.BaseController<userController, entities.user | entities.primitiveType<any> | entities.paginationEntity<entities.user>> {
+    class userController extends base.BaseController<userController, entities.user | providers.authentication.authData | entities.primitiveType<any> | entities.paginationEntity<entities.user>> {
         constructor();
+        getAuthData(id: number, onSuccess: (obj: providers.authentication.authData) => void, onError: (error: helpers.mdException) => void): void;
         getById(id: number, onSuccess: (obj: entities.user) => void, onError: (error: helpers.mdException) => void): void;
         getAllUserWithPermissions(usersData: any, onSuccess: (obj: Array<entities.user>) => void, onError: (error: helpers.mdException) => void): void;
         getOnlyNotAuthorizedUsers(usersData: any, onSuccess: (obj: Array<entities.user>) => void, onError: (error: helpers.mdException) => void): void;
@@ -1775,6 +1776,7 @@ declare namespace mdBusinessLogic.dataAccess.controllers {
         resetAccount(username: string, onSuccess: (obj: entities.user) => void, onError: (error: helpers.mdException) => void): void;
         saveUserPermissions(permissionsData: any, onSuccess: (obj: Array<entities.primitiveType<string>>) => void, onError: (error: helpers.mdException) => void): void;
         updateUser(user: entities.user, onSuccess: (obj: Array<entities.user>) => void, onError: (error: helpers.mdException) => void): void;
+        updateAuthData(user: entities.user, onSuccess: (obj: entities.user) => void, onError: (error: helpers.mdException) => void): void;
         search(searchData: any, onSuccess: (obj: Array<entities.user>) => void, onError: (error: helpers.mdException) => void): void;
         passwordReset(token: string, email: string, password: string, onSuccess: (obj: entities.user) => void, onError: (error: helpers.mdException) => string): void;
         validateTokenSocket(requestId: string, token: string, onSuccess: (obj: entities.user, socket: WebSocket) => void, onError: (error: helpers.mdException, socket: WebSocket) => void): string;
@@ -2208,12 +2210,20 @@ declare namespace mdBusinessLogic.dataAccess.entities.search {
     }
 }
 declare namespace mdBusinessLogic.dataAccess.providers.authentication {
-    class authData {
+    class authData implements entities.base.IBaseEntity<authData> {
         Values: any;
         AuthenticationProviderName: string;
         constructor(obj?: authData);
+        construct(data: any): void;
+        clone(): authData;
         GetData<T>(key: string, defaultValue?: any): T;
         SetData<T>(key: string, value: T): void;
+    }
+}
+declare namespace mdBusinessLogic.dataAccess.providers.authentication {
+    enum authMode {
+        login = 0,
+        form = 1
     }
 }
 declare namespace mdBusinessLogic.dataAccess.providers.authentication {
@@ -2229,6 +2239,11 @@ declare namespace mdBusinessLogic.dataAccess.providers.authentication {
         static add(obj: iProvider): boolean;
         static get(key: string): iProvider;
         static getAll(): Array<entities.generic.genericKeyValuePair<iProvider>>;
+    }
+}
+declare namespace mdBusinessLogic.dataAccess.providers.authentication {
+    class builtIn {
+        static getAuthenticationProviderId(): string;
     }
 }
 declare namespace mdBusinessLogic.dataAccess.providers.uiVisibility {
