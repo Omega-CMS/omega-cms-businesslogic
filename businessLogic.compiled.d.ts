@@ -565,9 +565,43 @@ declare namespace mdBusinessLogic.dataAccess.controllers.options {
         PageSize?: number;
     }
 }
+declare namespace mdBusinessLogic.dataAccess.controllers.options.v2.enums {
+    enum contentEnum {
+        ContentId = 0,
+        LCID = 1,
+        DateCreated = 2,
+        AuthorId = 3,
+        FolderId = 4,
+        Title = 5,
+        Html = 6,
+        SearchTerm = 7,
+        ContentTypeDefinitionId = 8,
+        ContentCount = 9,
+        Alias = 10,
+        TaxonomyId = 11,
+        IsPublished = 12,
+        Folderpath = 13,
+        ApprovalPending = 14
+    }
+}
+declare namespace mdBusinessLogic.dataAccess.controllers.options.v2 {
+    interface iContentRequestOptions extends iSortableRequestOptions<enums.contentEnum>, iPageableRequestOptions, iSearchableRequestOptions {
+        ContentIds: Array<string>;
+        OnlyPublished: boolean;
+        LoadAuthor: boolean;
+        FillFields: boolean;
+        FillMetaData: boolean;
+        Lcid: number;
+        FolderId: number;
+        TaxonomyId: number;
+        MenuId: number;
+        Alias: string;
+    }
+}
 declare namespace mdBusinessLogic.dataAccess.controllers {
     class contentController extends base.BaseController<contentController, entities.content | entities.primitiveType<any> | entities.paginationEntity<entities.content>> {
         constructor(controllerBase?: string);
+        get(opts: options.v2.iContentRequestOptions, onSuccess: (obj: entities.paginationEntity<entities.content>) => void, onError: (error: helpers.mdException) => void): void;
         getById(id: string, loadAuthor: boolean, lcid: number, fillFields: boolean, isDataBound: boolean, contentTypeDefinitionId: number, onSuccess: (obj: entities.content) => void, onError: (error: helpers.mdException) => void): void;
         getByIds(ids: Array<string>, loadAuthor: boolean, lcid: number, fillFields: boolean, isDataBound: boolean, contentTypeDefinitionId: number, onSuccess: (obj: Array<entities.content>) => void, onError: (error: helpers.mdException) => void): void;
         getByRequest(request: options.iContentRequestOptions, onSuccess: (obj: Array<entities.content>) => void, onError: (error: helpers.mdException) => void): void;
@@ -1804,6 +1838,27 @@ declare namespace mdBusinessLogic.dataAccess.controllers.options {
 declare namespace mdBusinessLogic.dataAccess.controllers.options {
     interface iSearchRequestOptions extends iPaginatedRequestOptions {
         searchTerm: string;
+    }
+}
+declare namespace mdBusinessLogic.dataAccess.controllers.options.v2 {
+    interface iPageableRequestOptions {
+        CurrentPageIndex: number;
+        MaxNumberOfRows: number;
+    }
+}
+declare namespace mdBusinessLogic.dataAccess.controllers.options.v2 {
+    interface iSearchableRequestOptions {
+        SearchTerm: string;
+    }
+}
+declare namespace mdBusinessLogic.dataAccess.controllers.options.v2 {
+    interface iSortableRequestOptions<T> {
+        SortField?: T;
+        SortDirection?: sortDirection;
+    }
+    enum sortDirection {
+        Ascending = 0,
+        Descending = 1
     }
 }
 declare namespace mdBusinessLogic.dataAccess.entities {
