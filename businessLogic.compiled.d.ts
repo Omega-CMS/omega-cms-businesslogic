@@ -261,6 +261,7 @@ declare namespace mdBusinessLogic.dataAccess.controllers.base {
         headers: Array<AjaxMethodHeader>;
         lcid: number;
         onSuccess: (data: AjaxMethodData<C, E>) => void;
+        onClose: (data: AjaxMethodData<C, E>) => void;
         onError: (data: AjaxMethodData<C, E>) => void;
         isInitCall: boolean;
         constructor(requestId?: string);
@@ -269,6 +270,7 @@ declare namespace mdBusinessLogic.dataAccess.controllers.base {
         getPartialUrl(prefix?: string): string;
         getMethodTypeString(): string;
         private _onsuccess;
+        private _onClose;
         private _onerror;
         getRequestId(): string;
     }
@@ -563,6 +565,7 @@ declare namespace mdBusinessLogic.dataAccess.controllers.options {
         SearchTerm?: string;
         PageIndex?: number;
         PageSize?: number;
+        DataBound?: boolean;
     }
 }
 declare namespace mdBusinessLogic.dataAccess.controllers.options.v2.enums {
@@ -586,16 +589,18 @@ declare namespace mdBusinessLogic.dataAccess.controllers.options.v2.enums {
 }
 declare namespace mdBusinessLogic.dataAccess.controllers.options.v2 {
     interface iContentRequestOptions extends iSortableRequestOptions<enums.contentEnum>, iPageableRequestOptions, iSearchableRequestOptions {
-        ContentIds: Array<string>;
-        OnlyPublished: boolean;
-        LoadAuthor: boolean;
-        FillFields: boolean;
-        FillMetaData: boolean;
-        Lcid: number;
-        FolderId: number;
-        TaxonomyId: number;
-        MenuId: number;
-        Alias: string;
+        ContentIds?: Array<string>;
+        OnlyPublished?: boolean;
+        LoadAuthor?: boolean;
+        FillFields?: boolean;
+        FillMetaData?: boolean;
+        Lcid?: number;
+        FolderId?: number;
+        TaxonomyId?: number;
+        MenuId?: number;
+        Alias?: string;
+        DataBound?: boolean;
+        ContentTypeId?: number;
     }
 }
 declare namespace mdBusinessLogic.dataAccess.controllers {
@@ -604,7 +609,7 @@ declare namespace mdBusinessLogic.dataAccess.controllers {
         get(opts: options.v2.iContentRequestOptions, onSuccess: (obj: entities.paginationEntity<entities.content>) => void, onError: (error: helpers.mdException) => void): void;
         getById(id: string, loadAuthor: boolean, lcid: number, fillFields: boolean, isDataBound: boolean, contentTypeDefinitionId: number, onSuccess: (obj: entities.content) => void, onError: (error: helpers.mdException) => void): void;
         getByIds(ids: Array<string>, loadAuthor: boolean, lcid: number, fillFields: boolean, isDataBound: boolean, contentTypeDefinitionId: number, onSuccess: (obj: Array<entities.content>) => void, onError: (error: helpers.mdException) => void): void;
-        getByRequest(request: options.iContentRequestOptions, onSuccess: (obj: Array<entities.content>) => void, onError: (error: helpers.mdException) => void): void;
+        getByRequest(request: options.iContentRequestOptions, onSuccess: (obj: entities.paginationEntity<entities.content>) => void, onError: (error: helpers.mdException) => void): void;
         taxonomyContentGetContentByTaxonomy(id: number, onSuccess: (obj: Array<entities.content>) => void, onError: (error: helpers.mdException) => void): void;
         taxonomyContentGetContentByTaxonomyFullMeta(id: number, onSuccess: (obj: Array<entities.content>) => void, onError: (error: helpers.mdException) => void): void;
         menuContentGetContentByMenu(id: number, onSuccess: (obj: Array<entities.content>) => void, onError: (error: helpers.mdException) => void): void;
@@ -1116,6 +1121,7 @@ declare namespace mdBusinessLogic.dataAccess.entities {
 declare namespace mdBusinessLogic.dataAccess.controllers {
     class folderController extends base.BaseController<folderController, entities.folder<entities.content> | entities.primitiveType<any> | entities.paginationEntity<entities.folder<entities.content>>> {
         constructor();
+        get(opts: options.v2.iFolderRequestOptions, onSuccess: (obj: entities.paginationEntity<entities.folder<entities.content>>) => void, onError: (error: helpers.mdException) => void): void;
         getByFolderPath(path: string, loadContents: boolean, onSuccess: (obj: entities.folder<entities.content>) => void, onError: (error: helpers.mdException) => void): void;
         search(searchTerm: string, parentId: number, recursive: boolean, onSuccess: (obj: Array<entities.folder<entities.content>>) => void, onError: (error: helpers.mdException) => void): void;
         paginationGetByFolderPath(paginationData: options.iFolderPaginatedRequestOptions, onSuccess: (obj: entities.folder<entities.content>) => void, onError: (error: helpers.mdException) => void): void;
@@ -1126,6 +1132,7 @@ declare namespace mdBusinessLogic.dataAccess.controllers {
         getById(id: number, onSuccess: (obj: entities.folder<entities.content>) => void, onError: (error: helpers.mdException) => void): void;
         save(folder: number, onSuccess: (obj: entities.folder<entities.content>) => void, onError: (error: helpers.mdException) => void): void;
         del(id: number, onSuccess: (obj: entities.folder<entities.content>) => void, onError: (error: helpers.mdException) => void): void;
+        getByRequest(request: options.iFolderPaginatedRequestOptions, onSuccess: (obj: Array<entities.folder<entities.content>>) => void, onError: (error: helpers.mdException) => void): void;
     }
 }
 declare namespace mdBusinessLogic.dataAccess.entities {
@@ -1429,6 +1436,8 @@ declare namespace mdBusinessLogic.dataAccess.entities {
     class innerReportDefinitionGridCoordinates extends base.BaseEntity implements base.IBaseEntity<innerReportDefinitionGridCoordinates> {
         x: number;
         y: number;
+        width: number;
+        height: number;
         constructor(obj?: innerReportDefinitionGridCoordinates);
         construct(data: any): void;
         clone(): innerReportDefinitionGridCoordinates;
@@ -1453,9 +1462,18 @@ declare namespace mdBusinessLogic.dataAccess.entities {
         Fields: Array<innerReportDefinitionProperty>;
         BaseFields: Array<innerReportDefinitionProperty>;
         ExtendedFields: Array<innerReportDefinitionProperty>;
+        Icon: string;
         constructor(obj?: innerReportDefinitionEntity);
         construct(data: any): void;
         clone(): innerReportDefinitionEntity;
+        getTypeString(): string;
+    }
+    enum innerReportDefinitionEntityTypes {
+        Content = 1,
+        User = 2,
+        Taxonomy = 3,
+        MediaContent = 4,
+        Folder = 5
     }
 }
 declare namespace mdBusinessLogic.dataAccess.entities {
@@ -1813,42 +1831,71 @@ declare namespace mdBusinessLogic.dataAccess.controllers {
         updateAuthData(user: entities.user, onSuccess: (obj: entities.user) => void, onError: (error: helpers.mdException) => void): void;
         search(searchData: any, onSuccess: (obj: Array<entities.user>) => void, onError: (error: helpers.mdException) => void): void;
         passwordReset(token: string, email: string, password: string, onSuccess: (obj: entities.user) => void, onError: (error: helpers.mdException) => string): void;
-        validateTokenSocket(requestId: string, token: string, onSuccess: (obj: entities.user, socket: WebSocket) => void, onError: (error: helpers.mdException, socket: WebSocket) => void): string;
+        validateTokenSocket(requestId: string, token: string, onSuccess: (obj: entities.user, socket: WebSocket) => void, onClose: (socket: WebSocket) => void, onError: (error: helpers.mdException, socket: WebSocket) => void): string;
     }
 }
 declare namespace mdBusinessLogic.dataAccess.controllers.options {
     interface iFolderPaginatedRequestOptions extends iPathPaginatedRequestOptions {
-        fillContents: boolean;
-        fillMediaContents: boolean;
+        fillContents?: boolean;
+        fillMediaContents?: boolean;
+        parentId?: number;
     }
 }
 declare namespace mdBusinessLogic.dataAccess.controllers.options {
     interface iPaginatedRequestOptions {
-        pageIndex: number;
-        pageSize: number;
-        fillContents: boolean;
-        fillMediaContents: boolean;
+        pageIndex?: number;
+        pageSize?: number;
+        fillContents?: boolean;
+        fillMediaContents?: boolean;
     }
 }
 declare namespace mdBusinessLogic.dataAccess.controllers.options {
     interface iPathPaginatedRequestOptions extends iSearchRequestOptions {
-        path: string;
+        path?: string;
     }
 }
 declare namespace mdBusinessLogic.dataAccess.controllers.options {
     interface iSearchRequestOptions extends iPaginatedRequestOptions {
-        searchTerm: string;
+        searchTerm?: string;
+    }
+}
+declare namespace mdBusinessLogic.dataAccess.controllers.options.v2.enums {
+    enum folderEnum {
+        FolderId = 0,
+        ParentId = 1,
+        Name = 2,
+        Description = 3,
+        FolderPath = 4
+    }
+}
+declare namespace mdBusinessLogic.dataAccess.controllers.options.v2 {
+    interface iFolderRequestOptions extends iSortableRequestOptions<enums.folderEnum>, iPageableRequestOptions, iSearchableRequestOptions {
+        FolderIds?: Array<number>;
+        Paths?: Array<string>;
+        FillParent?: boolean;
+        FillAllParents?: boolean;
+        FillContentTypeDefinitions?: boolean;
+        Depth?: number;
+        FillContents?: boolean;
+        FillChildren?: boolean;
+        ChildFolderRequestOptions?: iFolderRequestOptions;
+        ParentFolderRequestOptions?: iFolderRequestOptions;
+        ContentRequestOptions?: iContentRequestOptions;
+        ParentId?: number;
+        OnlyPublished?: boolean;
+        Lcid?: number;
+        FillTemplates?: boolean;
     }
 }
 declare namespace mdBusinessLogic.dataAccess.controllers.options.v2 {
     interface iPageableRequestOptions {
-        CurrentPageIndex: number;
-        MaxNumberOfRows: number;
+        CurrentPageIndex?: number;
+        MaxNumberOfRows?: number;
     }
 }
 declare namespace mdBusinessLogic.dataAccess.controllers.options.v2 {
     interface iSearchableRequestOptions {
-        SearchTerm: string;
+        SearchTerm?: string;
     }
 }
 declare namespace mdBusinessLogic.dataAccess.controllers.options.v2 {
@@ -2086,7 +2133,11 @@ declare namespace mdBusinessLogic.dataAccess.entities.generic {
 declare namespace mdBusinessLogic.dataAccess.entities.grid {
     class gridTileData implements base.IBaseEntity<gridTileData> {
         width: number;
+        width_medium: number;
+        width_small: number;
         height: number;
+        height_medium: number;
+        height_small: number;
         minWidth: number;
         minHeight: number;
         id: string;
@@ -2098,13 +2149,17 @@ declare namespace mdBusinessLogic.dataAccess.entities.grid {
         layoutPadding: boolean;
         layoutMargin: boolean;
         layoutWrap: boolean;
+        x: number;
+        y: number;
         constructor(obj?: gridTileData);
         construct(data: any): void;
         clone(): gridTileData;
-        getWidth(): number;
-        getHeight(): number;
-        setWidth(width: number): void;
-        setHeight(height: number): void;
+        setMinHeight(val: number): void;
+        setMinWidth(val: number): void;
+        getWidth(size: string): number;
+        getHeight(size: string): number;
+        setWidth(width: number, size: string): void;
+        setHeight(height: number, size: string): void;
     }
     enum gridTileLayout {
         Row = 1,
@@ -2454,7 +2509,8 @@ declare namespace mdBusinessLogic.settings {
         ajaxOnJsonSerialize = 7,
         onLogin = 8,
         onLogout = 9,
-        onLogedInAndPermissionsLoaded = 10
+        onLogedInAndPermissionsLoaded = 10,
+        onBeforeUnload = 11
     }
     class adminEvent {
         private type;
