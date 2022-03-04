@@ -59,7 +59,7 @@ declare namespace mdBusinessLogic.dataAccess.entities.base {
 declare namespace mdBusinessLogic.dataAccess.entities {
     class user extends base.BaseEntity implements base.IBaseEntity<user> {
         Username: string;
-        ProfileTypes: Array<any>;
+        ProfileTypes: Array<profileType>;
         ProfileTypeId: number;
         Token: string;
         DateRefreshToken: Date;
@@ -71,6 +71,7 @@ declare namespace mdBusinessLogic.dataAccess.entities {
         constructor(obj?: user);
         construct(data: any): void;
         clone(): user;
+        getProfileType(query: any): profileType;
     }
 }
 declare namespace mdBusinessLogic {
