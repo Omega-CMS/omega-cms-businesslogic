@@ -1,6 +1,6 @@
 {
     "name": "omega-cms-businesslogic",
-    "version": "0.89.1",
+    "version": "0.89.2",
     "description": "The compiled JavaScript client library for the Omega CMS software.",
     "main": "omegacms-businessLogic.js",
     "scripts": {
