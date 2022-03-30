@@ -1426,11 +1426,12 @@ declare namespace mdBusinessLogic.dataAccess.entities {
     }
 }
 declare namespace mdBusinessLogic.dataAccess.controllers {
-    class reportDataController extends base.BaseController<reportDataController, entities.reportData> {
+    class reportDataController extends base.BaseController<reportDataController, entities.reportData | entities.primitiveType<object>> {
         constructor();
         getAll(onSuccess: (obj: Array<entities.reportData>) => void, onError: (error: helpers.mdException) => void): void;
         getByReportSchedulerId(id: number, onSuccess: (obj: Array<entities.reportData>) => void, onError: (error: helpers.mdException) => void): void;
         save(reportData: entities.reportData, onSuccess: (obj: entities.reportData) => void, onError: (error: helpers.mdException) => void): void;
+        getReportData(data: any, onSuccess: (obj: entities.primitiveType<object>) => void, onError: (error: helpers.mdException) => void): void;
     }
 }
 declare namespace mdBusinessLogic.dataAccess.entities {
