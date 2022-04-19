@@ -1982,8 +1982,10 @@ declare namespace mdBusinessLogic.dataAccess.entities {
         ConnectionStringObject: any;
         DbType: string;
         ContentTypeDefinitionId: number;
+        CustomName: string;
         constructor(obj?: contentTypeDataSource);
         construct(data: any): void;
+        toString(): string;
         clone(): contentTypeDataSource;
     }
 }
