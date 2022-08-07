@@ -1977,9 +1977,17 @@ declare namespace mdBusinessLogic.dataAccess.entities {
     }
 }
 declare namespace mdBusinessLogic.dataAccess.entities {
+    interface iConnectionStringObject {
+        getObject(): any;
+        hasDynamicProperties(): boolean;
+        getDynamicPropertiesDirective(): string;
+        getSetupDirective(): string;
+    }
+}
+declare namespace mdBusinessLogic.dataAccess.entities {
     class contentTypeDataSource extends base.BaseEntity implements base.IBaseEntity<contentTypeDataSource> {
         ConnectionString: string;
-        ConnectionStringObject: any;
+        ConnectionStringObject: iConnectionStringObject;
         DbType: string;
         ContentTypeDefinitionId: number;
         CustomName: string;
