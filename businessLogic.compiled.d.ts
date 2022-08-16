@@ -1976,12 +1976,18 @@ declare namespace mdBusinessLogic.dataAccess.entities {
         clone(): contentTypeDataSourceJoin;
     }
 }
+declare namespace mdBusinessLogic.helpers {
+    interface iSingleton<T> {
+        getInstance(): T;
+    }
+}
 declare namespace mdBusinessLogic.dataAccess.entities {
-    interface iConnectionStringObject {
+    interface iConnectionStringObject extends mdBusinessLogic.helpers.iSingleton<iConnectionStringObject> {
         getObject(): any;
         hasDynamicProperties(): boolean;
         getDynamicPropertiesDirective(): string;
         getSetupDirective(): string;
+        getId(): string;
     }
 }
 declare namespace mdBusinessLogic.dataAccess.entities {
@@ -2366,6 +2372,14 @@ declare namespace mdBusinessLogic.dataAccess.providers.authentication {
 declare namespace mdBusinessLogic.dataAccess.providers.authentication {
     class builtIn {
         static getAuthenticationProviderId(): string;
+    }
+}
+declare namespace mdBusinessLogic.dataAccess.providers.dataaccess {
+    class dataaccessObjectRegistry {
+        private static _dataaccessObjectRegistry;
+        static add(obj: entities.iConnectionStringObject): boolean;
+        static get(key: string): entities.iConnectionStringObject;
+        static getAll(): Array<entities.generic.genericKeyValuePair<entities.iConnectionStringObject>>;
     }
 }
 declare namespace mdBusinessLogic.dataAccess.providers.uiVisibility {
