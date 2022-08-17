@@ -1976,24 +1976,10 @@ declare namespace mdBusinessLogic.dataAccess.entities {
         clone(): contentTypeDataSourceJoin;
     }
 }
-declare namespace mdBusinessLogic.helpers {
-    interface iSingleton<T> {
-        getInstance(): T;
-    }
-}
-declare namespace mdBusinessLogic.dataAccess.entities {
-    interface iConnectionStringObject extends mdBusinessLogic.helpers.iSingleton<iConnectionStringObject> {
-        getObject(): any;
-        hasDynamicProperties(): boolean;
-        getDynamicPropertiesDirective(): string;
-        getSetupDirective(): string;
-        getId(): string;
-    }
-}
 declare namespace mdBusinessLogic.dataAccess.entities {
     class contentTypeDataSource extends base.BaseEntity implements base.IBaseEntity<contentTypeDataSource> {
         ConnectionString: string;
-        ConnectionStringObject: iConnectionStringObject;
+        ConnectionStringObject: any;
         DbType: string;
         ContentTypeDefinitionId: number;
         CustomName: string;
@@ -2355,18 +2341,11 @@ declare namespace mdBusinessLogic.dataAccess.providers.authentication {
     }
 }
 declare namespace mdBusinessLogic.dataAccess.providers.authentication {
-    interface iProvider {
-        id?: string;
-        name?: string;
-        shortcode?: string;
-        data?: any;
-        icon?: string;
-    }
     class authenticationProviderRegistry {
         private static _authenticationProviderRegistry;
-        static add(obj: iProvider): boolean;
-        static get(key: string): iProvider;
-        static getAll(): Array<entities.generic.genericKeyValuePair<iProvider>>;
+        static add(obj: iAuthenticationProvider): boolean;
+        static get(key: string): iAuthenticationProvider;
+        static getAll(): Array<entities.generic.genericKeyValuePair<iAuthenticationProvider>>;
     }
 }
 declare namespace mdBusinessLogic.dataAccess.providers.authentication {
@@ -2374,12 +2353,33 @@ declare namespace mdBusinessLogic.dataAccess.providers.authentication {
         static getAuthenticationProviderId(): string;
     }
 }
-declare namespace mdBusinessLogic.dataAccess.providers.dataaccess {
-    class dataaccessObjectRegistry {
-        private static _dataaccessObjectRegistry;
-        static add(obj: entities.iConnectionStringObject): boolean;
-        static get(key: string): entities.iConnectionStringObject;
-        static getAll(): Array<entities.generic.genericKeyValuePair<entities.iConnectionStringObject>>;
+declare namespace mdBusinessLogic.dataAccess.providers.authentication {
+    interface iAuthenticationProvider {
+        id?: string;
+        name?: string;
+        shortcode?: string;
+        data?: any;
+        icon?: string;
+    }
+}
+declare namespace mdBusinessLogic.dataAccess.providers.dataAccess {
+    class dataAccessPluginRegistry {
+        private static _dataAccessPluginRegistry;
+        static add(obj: iDataAccessPluginProvider): boolean;
+        static get(key: string): iDataAccessPluginProvider;
+        static getAll(): Array<entities.generic.genericKeyValuePair<iDataAccessPluginProvider>>;
+    }
+}
+declare namespace mdBusinessLogic.dataAccess.providers.dataAccess {
+    interface iDataAccessPluginProvider {
+        id?: string;
+        name?: string;
+        setupDirective?: string;
+        data?: any;
+        icon?: string;
+        classType?: any;
+        hasDynamicProperties?: boolean;
+        dynamicPropertiesDirective?: string;
     }
 }
 declare namespace mdBusinessLogic.dataAccess.providers.uiVisibility {
@@ -2485,6 +2485,11 @@ declare namespace mdBusinessLogic.helpers {
         isEmpty(): boolean;
         toString(): string;
         toJSON(): any;
+    }
+}
+declare namespace mdBusinessLogic.helpers {
+    interface iSingleton<T> {
+        getInstance(): T;
     }
 }
 declare namespace mdBusinessLogic.helpers {
